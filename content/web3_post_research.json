@@ -1,0 +1,153 @@
+{
+{
+  "metadata": {
+    "created_at": "2026-08-24",
+    "purpose": "Insumo para criação de posts LinkedIn sobre Web3/Solidity/Rust",
+    "source": "Análise de perfis internacionais no X/Twitter + GitHub trends"
+  },
+  "influential_profiles": [
+    {"name": "Vitalik Buterin", "handle": "@VitalikButerin", "focus": "Ethereum", "platform": "X/Twitter"},
+    {"name": "Anatoly Yakovenko", "handle": "@aeyakovenko", "focus": "Solana", "platform": "X/Twitter"},
+    {"name": "Gavin Wood", "handle": "@gavofyork", "focus": "Polkadot/Substrate", "platform": "X/Twitter"},
+    {"name": "Stani Kulechov", "handle": "@StaniKulechov", "focus": "Aave/DeFi", "platform": "X/Twitter"},
+    {"name": "Chris Dixon", "handle": "@cdixon", "focus": "VC/Web3", "platform": "X/Twitter"},
+    {"name": "Andreas Antonopoulos", "handle": "@aantonop", "focus": "Educação crypto", "platform": "X/Twitter"},
+    {"name": "Patrick Collins", "handle": "@PatrickAlphaC", "focus": "Solidity/Foundry education", "platform": "X/Twitter"}
+  ],
+  "high_engagement_themes": [
+    "Cursos e roadmaps de Solidity (Foundry edition, otimização de gas, segurança de smart contracts)",
+    "Vagas para Senior/Staff Smart Contract Engineers (Solidity) e Rust Engineers em protocolos DeFi",
+    "Rust como linguagem de infraestrutura (performance, memory safety) vs Solidity como padrão EVM",
+    "Lançamentos e atualizações de VMs/clientes em Rust puro (PulseVM, Reth)",
+    "Comparações de linguagens, deficit de devs qualificados, Rust atraindo talentos de sistemas"
+  ],
+  "github_trends_2025_2026": [
+    {"project": "Solidity (oficial)", "stars": "~25k", "language": "Solidity", "category": "Linguagem"},
+    {"project": "Foundry", "stars": "~10-11k", "language": "Rust", "category": "Tooling"},
+    {"project": "Reth", "stars": "~5.7k+", "language": "Rust", "category": "Cliente Ethereum modular"},
+    {"project": "Solana", "stars": "~15k", "language": "Rust", "category": "L1"},
+    {"project": "Substrate/Polkadot", "stars": "~7-8k", "language": "Rust", "category": "L1/Framework"},
+    {"project": "Solady/Solmate/OpenZeppelin", "stars": "referência", "language": "Solidity", "category": "Bibliotecas"}
+  ],
+  "market_insights": {
+    "solidity": "Continua dominante para contratos EVM. Lidera ligeiramente em volume de vagas.",
+    "rust": "Cresce forte em infra e chains de alta performance. Sobe rápido em vagas (L1s alta TPS, clientes, bridges, infra). Ferramentas Rust (Foundry) já dominam workflow de muitos devs Solidity.",
+    "trend": "Solidity = padrão de contratos. Rust = linguagem de infraestrutura e tooling de alto desempenho."
+  },
+  "top_engagement_posts": [
+    {
+      "author": "Patrick Collins (@PatrickAlphaC)",
+      "topic": "Curso completo Solidity/Foundry Edition",
+      "likes": 2557,
+      "reposts": 619,
+      "views": 430000,
+      "url": "https://x.com/PatrickAlphaC/status/1666443418258505731"
+    },
+    {
+      "author": "Patrick Collins (@PatrickAlphaC)",
+      "topic": "Curso Cyfrin Updraft (38 horas)",
+      "likes": 1053,
+      "reposts": 157,
+      "views": 105000,
+      "url": "https://x.com/PatrickAlphaC/status/1813931263667093929"
+    },
+    {
+      "author": "Patrick Collins (@PatrickAlphaC)",
+      "topic": "Top 5 Places to Learn Smart Contract Development",
+      "likes": 524,
+      "reposts": 103,
+      "views": null,
+      "url": "https://x.com/PatrickAlphaC/status/1801600224231661993"
+    },
+    {
+      "author": "Metal Blockchain",
+      "topic": "PulseVM pure Rust",
+      "likes": 297,
+      "reposts": null,
+      "views": null,
+      "url": "https://x.com/MetalBlockchain/status/2090910315097792807"
+    }
+  ],
+  "post_ideas": [
+    {
+      "id": 1,
+      "title": "Roadmap prático 2026: Solidity + Foundry vs. Rust infrastructure",
+      "hook": "Solidity still rules EVM contracts, but Rust is eating the infrastructure layer (Reth, Foundry, Solana, Substrate). Here's the exact learning path I'm following / recommending in 2026…",
+      "format": "Lista 5-7 passos + links de recursos oficiais",
+      "language": "EN"
+    },
+    {
+      "id": 2,
+      "title": "Por que Foundry (escrito em Rust) mudou meu workflow de Solidity",
+      "hook": "Mostre antes/depois: testes mais rápidos, fuzzing, gas reports. Cite o crescimento de stars do repositório.",
+      "format": "Antes/depois com screenshots de código",
+      "language": "EN/PT"
+    },
+    {
+      "id": 3,
+      "title": "Gas optimization real que reduziu custos X%",
+      "hook": "Post técnico curto com snippet Solidity (antes/depois). 'This is why deep understanding of the EVM still matters even as Rust tooling improves.'",
+      "format": "Snippet de código antes/depois + lição",
+      "language": "EN"
+    },
+    {
+      "id": 4,
+      "title": "A guerra de talentos: deficit de devs Solidity e Rust",
+      "hook": "Companies are paying top dollar for production-ready Solidity AND Rust blockchain engineers. Here's what the data + GitHub activity show…",
+      "format": "Dados + vagas reais (Aave, Paradigm) + discussões de líderes",
+      "language": "EN"
+    },
+    {
+      "id": 5,
+      "title": "Reth, revm e o futuro dos clientes Ethereum em Rust",
+      "hook": "Explique de forma acessível por que a comunidade migra partes críticas para Rust (performance + safety).",
+      "format": "Explicação acessível + impacto para devs Solidity",
+      "language": "EN"
+    },
+    {
+      "id": 6,
+      "title": "Solidity vs Rust para smart contracts: quando usar cada um",
+      "hook": "Tabela comparativa (EVM maturity, safety, performance, curva de aprendizado, ecossistemas).",
+      "format": "Carrossel com tabela comparativa + opinião + menção Anchor/Stylus",
+      "language": "EN"
+    },
+    {
+      "id": 7,
+      "title": "Lição de auditoria / security research",
+      "hook": "I rewrote [projeto] following the auditor roadmap. Biggest insight about common vulnerabilities…",
+      "format": "Storytelling + lições de hacks reais (educativo)",
+      "language": "EN"
+    },
+    {
+      "id": 8,
+      "title": "Update de tendência GitHub: os repos que mais crescem em blockchain",
+      "hook": "Liste 4-5 repos (Foundry, Reth, Solana, Substrate, Solady) com stars e significado.",
+      "format": "Lista com dados quantitativos do GitHub",
+      "language": "EN"
+    },
+    {
+      "id": 9,
+      "title": "Como estou migrando partes do meu stack para Rust",
+      "hook": "Coming from Solidity, here's what surprised me about writing blockchain infra in Rust…",
+      "format": "Storytelling pessoal + dicas práticas de onboarding",
+      "language": "EN"
+    },
+    {
+      "id": 10,
+      "title": "Vagas e skills em alta: o que os top protocolos estão pedindo",
+      "hook": "Senior Solidity + Rust engineers are the hottest combination. Here's a skill matrix you can use to position yourself.",
+      "format": "Skill matrix visual + dados de vagas reais",
+      "language": "EN"
+    }
+  ],
+  "recommended_hashtags": [
+    "#Solidity", "#RustLang", "#BlockchainDevelopment", "#Web3",
+    "#Ethereum", "#Solana", "#SmartContracts"
+  ],
+  "linkedin_tips": [
+    "Poste com consistência",
+    "Interaja com comentários de devs internacionais",
+    "Use carrosséis, prints de código/GitHub ou screenshots de métricas",
+    "Escreva em inglês ou bilíngue para atingir público global"
+  ]
+}

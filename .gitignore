@@ -12,6 +12,7 @@ token.json
 # Data & outputs
 *.json
 !pyproject.toml
+!content/*.json
 *.pdf
 *.png
 *.xlsx
