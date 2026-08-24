@@ -25,11 +25,15 @@ def login() -> None:
 
 @cli.command()
 @click.argument("text")
-def post(text: str) -> None:
-    """Create a text post on LinkedIn (official API)."""
+@click.option("--document", "-d", type=click.Path(exists=True), help="PDF/document to attach (carousel)")
+@click.option("--doc-title", default="Carousel", help="Title for the document")
+def post(text: str, document: str | None, doc_title: str) -> None:
+    """Create a post on LinkedIn (official API). Use --document for carousel."""
+    from pathlib import Path
+
     from scoter.config import OfficialConfig
     from scoter.official.auth import load_token
-    from scoter.official.poster import create_text_post
+    from scoter.official.poster import create_document_post, create_text_post
 
     token = load_token()
     if not token:
@@ -39,8 +43,49 @@ def post(text: str) -> None:
         console.print("[red]No token. Run `scoter login` first.[/red]")
         raise SystemExit(1)
 
-    result = create_text_post(token, text)
+    if document:
+        result = create_document_post(token, text, Path(document), title=doc_title)
+    else:
+        result = create_text_post(token, text)
     console.print(f"[green]Posted![/green] ID: {result.get('id', 'unknown')}")
+
+
+@cli.command("my-posts")
+@click.option("--limit", "-n", default=0, help="Max posts (0 = all)")
+@click.option("--json-out", "-j", is_flag=True, help="Output raw JSON")
+def my_posts(limit: int, json_out: bool) -> None:
+    """Fetch all your posts from LinkedIn (official API)."""
+    import json as json_mod
+
+    from scoter.official.auth import load_token
+    from scoter.official.reader import extract_post_text, get_my_posts
+
+    token = load_token()
+    if not token:
+        console.print("[red]No token. Run `scoter login` first.[/red]")
+        raise SystemExit(1)
+
+    console.print("[dim]Fetching posts...[/dim]")
+    posts = get_my_posts(token, count=limit if limit > 0 else 100)
+    if limit > 0:
+        posts = posts[:limit]
+
+    if json_out:
+        console.print_json(json_mod.dumps(posts, ensure_ascii=False))
+        return
+
+    table = Table(title=f"My Posts ({len(posts)} total)")
+    table.add_column("#", style="dim", width=4)
+    table.add_column("Text", max_width=80)
+    table.add_column("ID", style="dim")
+
+    for i, p in enumerate(posts, 1):
+        text = extract_post_text(p)
+        preview = text[:120].replace("\n", " ") + ("..." if len(text) > 120 else "")
+        post_id = p.get("id", "?")
+        table.add_row(str(i), preview, post_id)
+
+    console.print(table)
 
 
 @cli.command()

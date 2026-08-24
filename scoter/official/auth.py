@@ -11,7 +11,7 @@ from scoter.config import OfficialConfig, TOKEN_PATH
 
 AUTHORIZE_URL = "https://www.linkedin.com/oauth/v2/authorization"
 TOKEN_URL = "https://www.linkedin.com/oauth/v2/accessToken"
-SCOPES = ["openid", "profile", "w_member_social"]
+SCOPES = ["openid", "profile", "r_member_social", "w_member_social"]
 
 
 def get_authorization_url(config: OfficialConfig) -> str:

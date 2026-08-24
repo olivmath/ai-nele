@@ -8,3 +8,12 @@ dist/
 *.egg-info/
 .venv/
 token.json
+
+# Data & outputs
+*.json
+!pyproject.toml
+*.pdf
+*.png
+*.xlsx
+*.html
+ChatGPT-*.md
