@@ -1,0 +1,12 @@
+1
+00:00:00,100 --> 00:00:02,310
+Rust resolve isso na raiz.
+
+2
+00:00:02,260 --> 00:00:07,479
+O ownership model e o borrow checker eliminam categorias inteiras de bugs em tempo de compilação.
+
+3
+00:00:07,479 --> 00:00:10,291
+Sem null pointers, sem data races.
+

@@ -1,0 +1,126 @@
+<template>
+<style>
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Medium.woff2') format('woff2'); font-weight: 500; }
+
+#root {
+  width: 1080px;
+  height: 1080px;
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+}
+
+.f02-bg { position: absolute; inset: 0; background: #1F1E1B; }
+
+.f02-label {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  margin-left: -40%;
+  width: 80%;
+  text-align: center;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.46cqw;
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: #CC785C;
+}
+.f02-label::before { content: '\2731 '; }
+
+.f02-code-block {
+  position: absolute;
+  top: 14%;
+  left: 8%;
+  width: 84%;
+  height: 42%;
+  background: #181715;
+  border: 1px solid rgba(250,249,245,0.14);
+  border-radius: 12px;
+  padding: 3cqw;
+  box-sizing: border-box;
+}
+
+.f02-code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.67cqw;
+  font-weight: 400;
+  line-height: 1.6;
+  color: #FAF9F5;
+  white-space: pre;
+}
+
+.f02-kw { color: #CC785C; }
+.f02-cmt { color: rgba(250,249,245,0.4); }
+
+.f02-vuln-tag {
+  position: absolute;
+  right: 12%;
+  padding: 0.4cqw 1.2cqw;
+  background: rgba(204,120,92,0.15);
+  border: 1px solid #CC785C;
+  border-radius: 9999px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.35cqw;
+  font-weight: 500;
+  color: #CC785C;
+}
+.f02-v1 { top: 20%; }
+.f02-v2 { top: 30%; }
+.f02-v3 { top: 40%; }
+
+.f02-bottom {
+  position: absolute;
+  top: 62%;
+  left: 50%;
+  margin-left: -40%;
+  width: 80%;
+  text-align: center;
+  font-family: 'EB Garamond', serif;
+  font-size: 4.6cqw;
+  font-weight: 400;
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  color: #FAF9F5;
+}
+.f02-hl { color: #CC785C; text-decoration: underline; text-decoration-color: #CC785C; text-underline-offset: 0.15em; }
+</style>
+
+<div data-composition-id="f02-problema-solidity" id="root" data-width="1080" data-height="1080">
+  <div class="f02-bg clip" id="f02-bg" data-start="0" data-duration="10.0" data-track-index="0"></div>
+  <div class="f02-label clip" id="f02-label" data-start="0" data-duration="10.0" data-track-index="1">Solidity</div>
+  <div class="f02-code-block clip" id="f02-code" data-start="0" data-duration="10.0" data-track-index="2">
+    <div class="f02-code"><span class="f02-kw">function</span> withdraw() <span class="f02-kw">public</span> {
+    <span class="f02-kw">uint</span> balance = balances[msg.sender];
+    <span class="f02-cmt">// external call before state update</span>
+    msg.sender.call{value: balance}(<span class="f02-kw">""</span>);
+    balances[msg.sender] = <span class="f02-kw">0</span>;
+}</div>
+  </div>
+  <div class="f02-vuln-tag f02-v1 clip" id="f02-vuln1" data-start="0" data-duration="10.0" data-track-index="3">reentrancy</div>
+  <div class="f02-vuln-tag f02-v2 clip" id="f02-vuln2" data-start="0" data-duration="10.0" data-track-index="3">overflow</div>
+  <div class="f02-vuln-tag f02-v3 clip" id="f02-vuln3" data-start="0" data-duration="10.0" data-track-index="3">delegatecall</div>
+  <div class="f02-bottom clip" id="f02-bottom" data-start="0" data-duration="10.0" data-track-index="4">bugs que o compilador <span class="f02-hl">não pega</span></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+
+tl.fromTo('#f02-label', { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.2);
+tl.fromTo('#f02-code', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.5);
+
+tl.fromTo('#f02-vuln1', { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 3.0);
+tl.fromTo('#f02-vuln2', { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 4.0);
+tl.fromTo('#f02-vuln3', { opacity: 0, x: 30 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 5.0);
+
+tl.to('#f02-code', { opacity: 0.4, duration: 0.5, ease: 'power3.out' }, 6.0);
+tl.fromTo('#f02-bottom', { opacity: 0, y: 20 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 6.3);
+
+window.__timelines["f02-problema-solidity"] = tl;
+</script>
+</template>

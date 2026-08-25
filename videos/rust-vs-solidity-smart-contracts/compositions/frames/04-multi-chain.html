@@ -1,0 +1,61 @@
+<template>
+<style>
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Medium.woff2') format('woff2'); font-weight: 500; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Medium.woff2') format('woff2'); font-weight: 500; }
+
+#root { width: 1080px; height: 1080px; position: relative; overflow: hidden; container-type: inline-size; }
+.f04-bg { position: absolute; inset: 0; background: #FAF9F5; }
+.f04-hub { position: absolute; top: 32%; left: 50%; margin-left: -60px; width: 120px; height: 120px; border-radius: 50%; background: #CC785C; display: flex; align-items: center; justify-content: center; font-family: 'EB Garamond', serif; font-size: 3.5cqw; font-weight: 400; color: #FAF9F5; z-index: 10; }
+.f04-node { position: absolute; padding: 1cqw 2cqw; background: #181715; border: 1px solid rgba(250,249,245,0.14); border-radius: 9999px; font-family: 'JetBrains Mono', monospace; font-size: 1.46cqw; font-weight: 500; color: #FAF9F5; z-index: 5; }
+.f04-n1 { top: 12%; left: 44%; }
+.f04-n2 { top: 28%; left: 78%; }
+.f04-n3 { top: 52%; left: 80%; }
+.f04-n4 { top: 60%; left: 12%; }
+.f04-n5 { top: 28%; left: 6%; }
+.f04-sol { position: absolute; bottom: 22%; right: 8%; padding: 1cqw 2cqw; background: #EFE9DE; border: 1px solid rgba(20,20,19,0.12); border-radius: 8px; font-family: 'Inter', sans-serif; font-size: 1.8cqw; color: rgba(20,20,19,0.5); }
+.f04-badge { position: absolute; top: 68%; left: 50%; margin-left: -100px; width: 200px; text-align: center; font-family: 'EB Garamond', serif; font-size: 3cqw; color: #CC785C; }
+.f04-lines { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+</style>
+
+<div data-composition-id="f04-multi-chain" id="root" data-width="1080" data-height="1080">
+  <div class="f04-bg clip" id="f04-bg" data-start="0" data-duration="11.7" data-track-index="0"></div>
+  <svg class="f04-lines clip" id="f04-svg" data-start="0" data-duration="11.7" data-track-index="1" viewBox="0 0 1080 1080">
+    <line x1="540" y1="400" x2="520" y2="170" stroke="#CC785C" stroke-width="1.5" stroke-dasharray="4 4" opacity="0" id="f04-l1"/>
+    <line x1="540" y1="400" x2="900" y2="340" stroke="#CC785C" stroke-width="1.5" stroke-dasharray="4 4" opacity="0" id="f04-l2"/>
+    <line x1="540" y1="400" x2="920" y2="600" stroke="#CC785C" stroke-width="1.5" stroke-dasharray="4 4" opacity="0" id="f04-l3"/>
+    <line x1="540" y1="400" x2="180" y2="690" stroke="#CC785C" stroke-width="1.5" stroke-dasharray="4 4" opacity="0" id="f04-l4"/>
+    <line x1="540" y1="400" x2="120" y2="340" stroke="#CC785C" stroke-width="1.5" stroke-dasharray="4 4" opacity="0" id="f04-l5"/>
+  </svg>
+  <div class="f04-hub clip" id="f04-hub" data-start="0" data-duration="11.7" data-track-index="3">Rust</div>
+  <div class="f04-node f04-n1 clip" id="f04-n1" data-start="0" data-duration="11.7" data-track-index="4">Solana</div>
+  <div class="f04-node f04-n2 clip" id="f04-n2" data-start="0" data-duration="11.7" data-track-index="4">Near</div>
+  <div class="f04-node f04-n3 clip" id="f04-n3" data-start="0" data-duration="11.7" data-track-index="4">Polkadot</div>
+  <div class="f04-node f04-n4 clip" id="f04-n4" data-start="0" data-duration="11.7" data-track-index="4">Cosmos</div>
+  <div class="f04-node f04-n5 clip" id="f04-n5" data-start="0" data-duration="11.7" data-track-index="4">Aptos</div>
+  <div class="f04-sol clip" id="f04-sol" data-start="0" data-duration="11.7" data-track-index="5">Solidity → EVM only</div>
+  <div class="f04-badge clip" id="f04-badge" data-start="0" data-duration="11.7" data-track-index="6">5+ ecossistemas</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo('#f04-hub', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.6, ease: 'power3.out' }, 0.3);
+tl.fromTo('#f04-n1', { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 3.2);
+tl.fromTo('#f04-l1', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 3.2);
+tl.fromTo('#f04-n2', { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 4.0);
+tl.fromTo('#f04-l2', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.0);
+tl.fromTo('#f04-n3', { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 4.8);
+tl.fromTo('#f04-l3', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 4.8);
+tl.fromTo('#f04-n4', { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 5.6);
+tl.fromTo('#f04-l4', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 5.6);
+tl.fromTo('#f04-n5', { opacity: 0, scale: 0.3 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.4)' }, 6.4);
+tl.fromTo('#f04-l5', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 6.4);
+tl.fromTo('#f04-sol', { opacity: 0, x: 20 }, { opacity: 1, x: 0, duration: 0.5, ease: 'power3.out' }, 7.8);
+tl.fromTo('#f04-badge', { opacity: 0, y: 10 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 9.6);
+window.__timelines["f04-multi-chain"] = tl;
+</script>
+</template>
