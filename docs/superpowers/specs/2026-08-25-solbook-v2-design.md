@@ -65,10 +65,10 @@ FAQ e CTA final
 
 ## Direção visual
 
-- Editorial técnico, com contraste forte, layout centralizado e leitura ampla.
-- Sem VSL na primeira versão; o CTA de WhatsApp é o elemento central da primeira dobra.
-- Base escura e superfícies neutras; azul elétrico reservado para CTA e sinalizações de Solidity.
-- Sem galeria ou mockups até que os ativos reais sejam fornecidos.
+- Identidade selecionada: **Engineering Blueprint**.
+- Editorial técnico com fundo claro quadriculado, diagramas de engenharia e azul técnico como cor de ação.
+- O fluxo `storage → calldata → tests → audit → deploy` é o elemento visual central da primeira dobra.
+- Sem VSL, galeria ou mockups até que ativos reais sejam fornecidos; o CTA de WhatsApp é o elemento central.
 - Mobile primeiro, HTML semântico, foco visível e CTA de WhatsApp configurável.
 
 ## Pendências controladas
