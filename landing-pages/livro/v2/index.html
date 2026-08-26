@@ -146,10 +146,7 @@
         .social-proof-card img { width: 100%; height: 100%; object-fit: cover; }
         @keyframes social-scroll { to { transform: translateX(-50%); } }
 
-        .incident-ticker-viewport { overflow: hidden; }
-        .incident-ticker-track { display: flex; align-items: center; width: max-content; gap: clamp(2rem, 6vw, 7rem); padding: 2rem 8vw 2rem 0; }
-        .incident-ticker-card { width: min(33rem, 72vw); flex: none; background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.14); box-shadow: inset 3px 0 0 var(--lime); }
-        .incident-ticker-separator { color: var(--lime); font-size: clamp(2rem, 5vw, 4rem); line-height: 1; }
+        .incident-ticker-card { background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.14); box-shadow: inset 3px 0 0 var(--lime); }
 
         @media (max-width: 640px) {
             body { overflow-x: hidden; }
@@ -161,9 +158,6 @@
             .tracking-tech { letter-spacing: .12em; }
             summary > div { min-width: 0; }
             summary h3 { font-size: 1rem !important; }
-            .incident-ticker-viewport { overflow-x: auto; mask-image: none; }
-            .incident-ticker-track { gap: 1rem; padding: 1rem 1.25rem; }
-            .incident-ticker-card { width: min(82vw, 23rem); }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -251,16 +245,28 @@
                 <h2 class="text-5xl font-bold leading-tight mt-6 mb-5" data-sd-id="62">O material hoje não ensina a <span class="text-[#ccff00]" data-sd-id="63">realidade.</span></h2>
                 <p class="text-white/60">Tutoriais rasos não te preparam para os milhões em jogo. A história mostra o preço de ignorar segurança.</p>
             </div>
-            <div class="incident-ticker-viewport mt-10" data-sd-id="68">
-                <div id="incident-ticker-track" class="incident-ticker-track">
-                    <span class="font-mono text-xs tracking-tech text-white/30">INCIDENT LOG //</span>
-                    <article class="incident-ticker-card p-7 rounded-2xl"><div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 02</span><span>17 JUN 2016</span></div><p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 210 milhões</p><p class="text-xs text-red-300/70 mb-5">US$ 60M · 3,6M ETH drenados</p><h3 class="text-2xl font-bold leading-tight mb-4">The DAO: a reentrância que dividiu o Ethereum</h3><button type="button" data-hack-modal="hack-modal-dao" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white">Saiba mais →</button></article>
-                    <span class="incident-ticker-separator">→</span>
-                    <article class="incident-ticker-card p-7 rounded-2xl"><div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 17</span><span>13 MAR 2023</span></div><p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 1,03 bilhão</p><p class="text-xs text-red-300/70 mb-5">US$ 197M · 100% devolvidos</p><h3 class="text-2xl font-bold leading-tight mb-4">Euler: dez auditorias não bastaram</h3><button type="button" data-hack-modal="hack-modal-euler" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white">Saiba mais →</button></article>
-                    <span class="incident-ticker-separator">→</span>
-                    <article class="incident-ticker-card p-7 rounded-2xl"><div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 15</span><span>30 JUL 2023</span></div><p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 345 milhões</p><p class="text-xs text-red-300/70 mb-5">US$ 70M · bug no compilador</p><h3 class="text-2xl font-bold leading-tight mb-4">Curve: o lock que nunca chegou ao bytecode</h3><button type="button" data-hack-modal="hack-modal-curve" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white">Saiba mais →</button></article>
-                    <span class="incident-ticker-separator">→</span><span class="font-mono text-xs tracking-tech text-[#ccff00]">SEGURANÇA NÃO É OPCIONAL</span>
-                </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 px-12 lg:px-24">
+                <article class="incident-ticker-card p-7 rounded-2xl flex flex-col">
+                    <div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 02</span><span>17 JUN 2016</span></div>
+                    <p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 210 milhões</p>
+                    <p class="text-xs text-red-300/70 mb-5">US$ 60M · 3,6M ETH drenados</p>
+                    <h3 class="text-2xl font-bold leading-tight mb-4">The DAO: a reentrância que dividiu o Ethereum</h3>
+                    <button type="button" data-hack-modal="hack-modal-dao" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white mt-auto text-left">Saiba mais →</button>
+                </article>
+                <article class="incident-ticker-card p-7 rounded-2xl flex flex-col">
+                    <div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 17</span><span>13 MAR 2023</span></div>
+                    <p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 1,03 bilhão</p>
+                    <p class="text-xs text-red-300/70 mb-5">US$ 197M · 100% devolvidos</p>
+                    <h3 class="text-2xl font-bold leading-tight mb-4">Euler: dez auditorias não bastaram</h3>
+                    <button type="button" data-hack-modal="hack-modal-euler" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white mt-auto text-left">Saiba mais →</button>
+                </article>
+                <article class="incident-ticker-card p-7 rounded-2xl flex flex-col">
+                    <div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 15</span><span>30 JUL 2023</span></div>
+                    <p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 345 milhões</p>
+                    <p class="text-xs text-red-300/70 mb-5">US$ 70M · bug no compilador</p>
+                    <h3 class="text-2xl font-bold leading-tight mb-4">Curve: o lock que nunca chegou ao bytecode</h3>
+                    <button type="button" data-hack-modal="hack-modal-curve" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white mt-auto text-left">Saiba mais →</button>
+                </article>
             </div>
         </section>
 
@@ -614,22 +620,6 @@
             return `<figure class="social-proof-card glass rounded-2xl"><img src="${src}" alt="Prova social ${String(number).padStart(2, '0')}" style="object-position: ${position}" loading="lazy"></figure>`;
         }).join('');
 
-        const incidentTickerTrack = document.getElementById('incident-ticker-track');
-        if (window.gsap && window.ScrollTrigger && window.innerWidth > 767) {
-            gsap.registerPlugin(ScrollTrigger);
-            gsap.to(incidentTickerTrack, {
-                x: () => -(incidentTickerTrack.scrollWidth - window.innerWidth + 80),
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: '#problema',
-                    start: 'top top',
-                    end: () => `+=${incidentTickerTrack.scrollWidth}`,
-                    pin: true,
-                    scrub: 1,
-                    invalidateOnRefresh: true
-                }
-            });
-        }
 
         document.querySelectorAll('[data-hack-modal]').forEach((button) => {
             button.addEventListener('click', () => document.getElementById(button.dataset.hackModal).showModal());
