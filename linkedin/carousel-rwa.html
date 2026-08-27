@@ -1,0 +1,475 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carousel RWA — LinkedIn</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --muted-foreground: light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --red: light-dark(rgb(186 38 35), rgb(250 66 62));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --amber: light-dark(rgb(180 120 0), rgb(255 184 51));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(#5dc977, #74d58b);
+}
+
+:root[data-theme="light"] { color-scheme: light; }
+:root[data-theme="dark"] { color-scheme: dark; }
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  font-weight: var(--font-weight-normal);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  padding: 24px 16px 64px;
+}
+
+.page-header {
+  text-align: center;
+  margin-bottom: 24px;
+  color: var(--muted-foreground);
+  font-size: 13px;
+}
+
+.slides {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.slide {
+  width: 540px;
+  height: 675px;
+  background: var(--background);
+  border-radius: 16px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 48px 44px;
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 600px) {
+  .slide { width: 100%; height: auto; min-height: 480px; padding: 36px 24px; }
+}
+
+.slide-num {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+
+.slide-footer {
+  position: absolute;
+  bottom: 24px;
+  left: 44px;
+  right: 44px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted-foreground);
+}
+
+/* ── Slide 1: Hook ── */
+.s1 {
+  justify-content: center;
+  align-items: flex-start;
+}
+.s1 .eyebrow {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--primary);
+  margin-bottom: 24px;
+}
+.s1 .big-num {
+  font-size: 88px;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -3px;
+  color: var(--foreground);
+  margin-bottom: 6px;
+}
+.s1 .big-label {
+  font-size: 20px;
+  font-weight: var(--font-weight-medium);
+  color: var(--muted-foreground);
+  margin-bottom: 36px;
+}
+.s1 .contrast-row {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+.s1 .zero {
+  font-size: 88px;
+  font-weight: 700;
+  line-height: 0.9;
+  letter-spacing: -3px;
+  color: var(--red);
+  opacity: 0.4;
+}
+.s1 .zero-label {
+  font-size: 20px;
+  font-weight: var(--font-weight-medium);
+  color: var(--muted-foreground);
+  opacity: 0.5;
+}
+
+/* ── Slide 2: Vertical Chart ── */
+.s2 { justify-content: flex-start; }
+.s2 .title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  padding-left: 44px;
+  margin-bottom: 28px;
+}
+.chart-head .text-small {
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+.viz-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 9999px;
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+  font-size: 12px;
+}
+.growth-annotation {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.plot-area {
+  position: relative;
+  flex: 1;
+  margin: 0 8px 44px 44px;
+}
+
+.grid-line {
+  position: absolute;
+  right: 0;
+  bottom: var(--tick-position);
+  left: 0;
+  height: 0;
+  border-top: 1px solid var(--border);
+}
+.grid-line.baseline {
+  border-top-color: var(--muted-foreground);
+}
+.grid-line .tick {
+  position: absolute;
+  top: 0;
+  right: calc(100% + 8px);
+  transform: translateY(-50%);
+  white-space: nowrap;
+  font-size: 12px;
+  color: var(--muted-foreground);
+}
+
+.bars {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: end;
+  gap: 40px;
+  padding: 0 56px;
+}
+.bar-slot {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  height: 100%;
+}
+.bar {
+  position: relative;
+  width: min(100px, 78%);
+  border-radius: 4px 4px 0 0;
+  background: var(--viz-series-1);
+}
+.bar-2025 {
+  background: color-mix(in srgb, var(--viz-series-1) 56%, transparent);
+}
+.value-label {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  color: var(--foreground);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  font-size: 14px;
+}
+.period-label {
+  position: absolute;
+  top: calc(100% + 12px);
+  left: 50%;
+  width: max-content;
+  transform: translateX(-50%);
+  color: var(--foreground);
+  text-align: center;
+  white-space: nowrap;
+  font-size: 13px;
+}
+.scale-note {
+  margin: 0 8px 0 44px;
+  text-align: right;
+  font-size: 11px;
+  color: var(--muted-foreground);
+}
+
+/* ── Slide 3: Allocation ── */
+.s3 { justify-content: flex-start; }
+.s3 .title {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+  margin-bottom: 32px;
+}
+.allocation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  flex: 1;
+  justify-content: center;
+}
+.alloc-row {
+  display: grid;
+  grid-template-columns: 130px 1fr 50px;
+  align-items: center;
+  gap: 14px;
+}
+.alloc-name { font-size: 13px; font-weight: var(--font-weight-medium); }
+.alloc-bar-track {
+  height: 18px;
+  background: var(--card);
+  border-radius: 4px;
+  overflow: hidden;
+}
+.alloc-bar-fill { height: 100%; border-radius: 4px; }
+.alloc-pct {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  text-align: right;
+}
+.source-note {
+  font-size: 11px;
+  color: var(--muted-foreground);
+  margin-top: 16px;
+}
+
+/* ── Slide 4: CTA ── */
+.s4 {
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+.s4 .cta-question {
+  font-size: 26px;
+  font-weight: 600;
+  line-height: 1.25;
+  text-wrap: balance;
+  margin-bottom: 36px;
+}
+.poll-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  max-width: 340px;
+}
+.poll-opt {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 18px;
+  font-size: 13px;
+  font-weight: var(--font-weight-medium);
+  text-align: left;
+  color: var(--foreground);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.poll-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--muted-foreground);
+  flex-shrink: 0;
+}
+.s4 .swipe-hint {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--primary);
+  margin-top: 32px;
+}
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  LinkedIn Carousel — 4 slides (1080 × 1350) · screenshot cada slide para upload
+</div>
+
+<div class="slides">
+
+  <!-- SLIDE 1: Hook -->
+  <div class="slide s1">
+    <div class="slide-num">1/4</div>
+    <div class="eyebrow">Dados de 2026</div>
+    <div class="big-num">92%</div>
+    <div class="big-label">dos fundos crypto investem em RWA</div>
+    <div class="contrast-row">
+      <span class="zero">0%</span>
+      <span class="zero-label">em memecoins</span>
+    </div>
+    <div class="slide-footer">
+      <span>@olivmath</span>
+      <span>deslize →</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 2: Vertical Chart -->
+  <div class="slide s2">
+    <div class="slide-num">2/4</div>
+    <div class="title">Tokenização de ativos reais no Brasil</div>
+    <div class="chart-head">
+      <span class="text-small">R$ bilhões</span>
+      <div class="growth-annotation">
+        <span class="viz-badge">↑ +87,5%</span>
+        <span class="text-small">entre os períodos</span>
+      </div>
+    </div>
+    <div class="plot-area">
+      <div class="grid-line" style="--tick-position: 100%;"><span class="tick">3,0</span></div>
+      <div class="grid-line" style="--tick-position: 83.333333%;"><span class="tick">2,5</span></div>
+      <div class="grid-line" style="--tick-position: 66.666667%;"><span class="tick">2,0</span></div>
+      <div class="grid-line" style="--tick-position: 50%;"><span class="tick">1,5</span></div>
+      <div class="grid-line" style="--tick-position: 33.333333%;"><span class="tick">1,0</span></div>
+      <div class="grid-line" style="--tick-position: 16.666667%;"><span class="tick">0,5</span></div>
+      <div class="grid-line baseline" style="--tick-position: 0%;"><span class="tick">0,0</span></div>
+      <div class="bars">
+        <div class="bar-slot">
+          <div class="bar bar-2025" style="height: 53.3333333333%;">
+            <span class="value-label">R$ 1,6 bi</span>
+          </div>
+          <span class="period-label">1º sem. 2025</span>
+        </div>
+        <div class="bar-slot">
+          <div class="bar bar-2026" style="height: 100%;">
+            <span class="value-label">R$ 3,0 bi</span>
+          </div>
+          <span class="period-label">1º sem. 2026</span>
+        </div>
+      </div>
+    </div>
+    <p class="scale-note">Escala linear · cada linha = R$ 0,5 bi</p>
+    <div class="slide-footer">
+      <span>@olivmath</span>
+      <span>deslize →</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 3: Allocation -->
+  <div class="slide s3">
+    <div class="slide-num">3/4</div>
+    <div class="title">Onde o dinheiro institucional está indo</div>
+    <div class="allocation-list">
+      <div class="alloc-row">
+        <div class="alloc-name">RWA / Tokenização</div>
+        <div class="alloc-bar-track"><div class="alloc-bar-fill" style="width:100%; background: var(--green);"></div></div>
+        <div class="alloc-pct" style="color: var(--green);">92%</div>
+      </div>
+      <div class="alloc-row">
+        <div class="alloc-name">DeFi</div>
+        <div class="alloc-bar-track"><div class="alloc-bar-fill" style="width:83.7%; background: var(--primary);"></div></div>
+        <div class="alloc-pct" style="color: var(--primary);">77%</div>
+      </div>
+      <div class="alloc-row">
+        <div class="alloc-name">Stablecoins</div>
+        <div class="alloc-bar-track"><div class="alloc-bar-fill" style="width:83.7%; background: var(--primary); opacity:0.6;"></div></div>
+        <div class="alloc-pct" style="color: var(--primary); opacity:0.6;">77%</div>
+      </div>
+      <div class="alloc-row">
+        <div class="alloc-name">AI Descentralizada</div>
+        <div class="alloc-bar-track"><div class="alloc-bar-fill" style="width:12%; background: var(--amber);"></div></div>
+        <div class="alloc-pct" style="color: var(--amber);">11%</div>
+      </div>
+      <div class="alloc-row">
+        <div class="alloc-name">Memecoins</div>
+        <div class="alloc-bar-track"><div class="alloc-bar-fill" style="width:2px; background: var(--red);"></div></div>
+        <div class="alloc-pct" style="color: var(--red);">0%</div>
+      </div>
+    </div>
+    <p class="source-note">Fonte: Web3 Founder Survey 2026 — 13 fundos institucionais</p>
+    <div class="slide-footer">
+      <span>@olivmath</span>
+      <span>deslize →</span>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: CTA -->
+  <div class="slide s4">
+    <div class="slide-num">4/4</div>
+    <div class="cta-question">Qual setor Web3<br>vai dominar 2027?</div>
+    <div class="poll-options">
+      <div class="poll-opt"><span class="poll-dot"></span>Tokenização de ativos reais (RWA)</div>
+      <div class="poll-opt"><span class="poll-dot"></span>DeFi Institucional</div>
+      <div class="poll-opt"><span class="poll-dot"></span>AI Agents on-chain</div>
+      <div class="poll-opt"><span class="poll-dot"></span>DePIN</div>
+    </div>
+    <div class="swipe-hint">Comenta sua aposta ↓</div>
+    <div class="slide-footer">
+      <span>@olivmath</span>
+      <span></span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -16,5 +16,8 @@ token.json
 *.pdf
 *.png
 *.xlsx
-*.html
 ChatGPT-*.md
+
+
+.agents
+.claude

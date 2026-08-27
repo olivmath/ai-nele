@@ -1,0 +1,46 @@
+<template>
+<style>
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Bold.woff2') format('woff2'); font-weight: 700; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Medium.woff2') format('woff2'); font-weight: 500; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; }
+
+#root { width: 1080px; height: 1080px; position: relative; overflow: hidden; container-type: inline-size; }
+.f07-bg { position: absolute; inset: 0; background: #181715; }
+.f07-glow { position: absolute; top: 22%; left: 50%; margin-left: -250px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(204,120,92,0.1) 0%, transparent 70%); pointer-events: none; }
+.f07-line1 { position: absolute; top: 30%; left: 50%; margin-left: -42%; width: 84%; text-align: center; font-family: 'EB Garamond', serif; font-size: 7.3cqw; font-weight: 400; line-height: 1.02; letter-spacing: -0.022em; color: #FAF9F5; }
+.f07-rust { color: #CC785C; font-weight: 700; display: inline-block; }
+.f07-line2 { position: absolute; top: 55%; left: 50%; margin-left: -38%; width: 76%; text-align: center; font-family: 'EB Garamond', serif; font-size: 4.6cqw; font-weight: 400; line-height: 1.15; letter-spacing: -0.018em; color: rgba(250,249,245,0.65); }
+.f07-quando { color: #CC785C; text-decoration: underline; text-decoration-color: #CC785C; text-underline-offset: 0.15em; }
+.f07-cta { position: absolute; top: 72%; left: 50%; margin-left: -15%; width: 30%; text-align: center; padding: 1.2cqw 2cqw; background: #CC785C; border-radius: 9999px; font-family: 'JetBrains Mono', monospace; font-size: 1.46cqw; font-weight: 400; color: #FAF9F5; letter-spacing: 0.08em; }
+.f07-handle { position: absolute; top: 80%; left: 50%; margin-left: -15%; width: 30%; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.35cqw; color: rgba(250,249,245,0.4); }
+</style>
+
+<div data-composition-id="f07-landing" id="root" data-width="1080" data-height="1080">
+  <div class="f07-bg clip" id="f07-bg" data-start="0" data-duration="8.0" data-track-index="0"></div>
+  <div class="f07-glow clip" id="f07-glow" data-start="0" data-duration="8.0" data-track-index="1"></div>
+  <div class="f07-line1 clip" id="f07-line1" data-start="0" data-duration="8.0" data-track-index="2">O futuro fala <span class="f07-rust" id="f07-rust">Rust</span></div>
+  <div class="f07-line2 clip" id="f07-line2" data-start="0" data-duration="8.0" data-track-index="3">A questão não é se — é <span class="f07-quando">quando</span></div>
+  <div class="f07-cta clip" id="f07-cta" data-start="0" data-duration="8.0" data-track-index="4">SALVE + SIGA</div>
+  <div class="f07-handle clip" id="f07-handle" data-start="0" data-duration="8.0" data-track-index="5">@olivmath</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+
+tl.fromTo('#f07-line1', { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out' }, 0.2);
+tl.fromTo('#f07-rust', { scale: 0.6 }, { scale: 1.15, duration: 0.3, ease: 'power3.out' }, 0.8);
+tl.to('#f07-rust', { scale: 1, duration: 0.4, ease: 'elastic.out(1, 0.5)' }, 1.1);
+tl.fromTo('#f07-glow', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.8, ease: 'power3.out' }, 0.8);
+
+tl.fromTo('#f07-line2', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 2.5);
+
+tl.fromTo('#f07-cta', { opacity: 0, scale: 0.8 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' }, 4.5);
+tl.fromTo('#f07-handle', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 5.5);
+
+window.__timelines["f07-landing"] = tl;
+</script>
+</template>

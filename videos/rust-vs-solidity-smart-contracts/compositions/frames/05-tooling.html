@@ -1,0 +1,69 @@
+<template>
+<style>
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Medium.woff2') format('woff2'); font-weight: 500; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Medium.woff2') format('woff2'); font-weight: 500; }
+
+#root { width: 1080px; height: 1080px; position: relative; overflow: hidden; container-type: inline-size; }
+.f05-bg { position: absolute; inset: 0; background: #FAF9F5; }
+.f05-card { position: absolute; top: 10%; width: 42%; height: 58%; border-radius: 12px; padding: 3cqw; box-sizing: border-box; }
+.f05-left { left: 4%; background: #181715; border: 1px solid rgba(250,249,245,0.14); }
+.f05-right { right: 4%; background: #FAF9F5; border: 1px solid rgba(20,20,19,0.12); }
+.f05-hdr { font-family: 'JetBrains Mono', monospace; font-size: 1.46cqw; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #CC785C; margin-bottom: 2cqw; }
+.f05-term { font-family: 'JetBrains Mono', monospace; font-size: 1.5cqw; line-height: 1.8; color: #FAF9F5; }
+.f05-prompt { color: #CC785C; }
+.f05-ok { color: #7da87d; }
+.f05-feat { display: flex; align-items: center; gap: 1cqw; font-family: 'Inter', sans-serif; font-size: 2cqw; font-weight: 500; line-height: 2.2; color: #FAF9F5; }
+.f05-chk { color: #CC785C; }
+.f05-tag { display: inline-block; padding: 0.6cqw 1.4cqw; margin: 0.5cqw; background: #EFE9DE; border: 1px solid rgba(20,20,19,0.12); border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 1.35cqw; color: #141413; }
+.f05-badge { position: absolute; bottom: 15%; right: 8%; padding: 0.6cqw 1.8cqw; background: rgba(150,88,68,0.2); border: 1px solid #964458; border-radius: 9999px; font-family: 'JetBrains Mono', monospace; font-size: 1.35cqw; font-weight: 500; color: #964458; }
+</style>
+
+<div data-composition-id="f05-tooling" id="root" data-width="1080" data-height="1080">
+  <div class="f05-bg clip" id="f05-bg" data-start="0" data-duration="9.8" data-track-index="0"></div>
+  <div class="f05-card f05-left clip" id="f05-left" data-start="0" data-duration="9.8" data-track-index="1">
+    <div class="f05-hdr">Cargo</div>
+    <div class="f05-term" id="f05-t1"><span class="f05-prompt">$</span> cargo test</div>
+    <div class="f05-term" id="f05-t2"><span class="f05-ok">✓</span> running 42 tests... ok</div>
+    <div style="height: 1.5cqw"></div>
+    <div class="f05-feat" id="f05-f1"><span class="f05-chk">✓</span> testes</div>
+    <div class="f05-feat" id="f05-f2"><span class="f05-chk">✓</span> benchmarks</div>
+    <div class="f05-feat" id="f05-f3"><span class="f05-chk">✓</span> docs</div>
+  </div>
+  <div class="f05-card f05-right clip" id="f05-right" data-start="0" data-duration="9.8" data-track-index="2">
+    <div class="f05-hdr" style="color:#141413">Solidity stack</div>
+    <div style="margin-top:2cqw">
+      <span class="f05-tag" id="f05-tg1">Hardhat</span>
+      <span class="f05-tag" id="f05-tg2">Foundry</span>
+      <span class="f05-tag" id="f05-tg3">Ethers.js</span>
+      <span class="f05-tag" id="f05-tg4">OpenZeppelin</span>
+      <span class="f05-tag" id="f05-tg5">Waffle</span>
+      <span class="f05-tag" id="f05-tg6">Truffle</span>
+    </div>
+  </div>
+  <div class="f05-badge clip" id="f05-badge" data-start="0" data-duration="9.8" data-track-index="3">fragmentado</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo('#f05-left', { opacity: 0, x: -40, rotationY: 8 }, { opacity: 1, x: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 0.3);
+tl.fromTo('#f05-t1', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 1.0);
+tl.fromTo('#f05-t2', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 1.5);
+tl.fromTo('#f05-f1', { opacity: 0, x: 15 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power3.out' }, 3.0);
+tl.fromTo('#f05-f2', { opacity: 0, x: 15 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power3.out' }, 3.6);
+tl.fromTo('#f05-f3', { opacity: 0, x: 15 }, { opacity: 1, x: 0, duration: 0.3, ease: 'power3.out' }, 4.2);
+tl.fromTo('#f05-right', { opacity: 0, x: 40, rotationY: -8 }, { opacity: 1, x: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 5.5);
+tl.fromTo('#f05-tg1', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.2)' }, 5.9);
+tl.fromTo('#f05-tg2', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.2)' }, 6.1);
+tl.fromTo('#f05-tg3', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.2)' }, 6.3);
+tl.fromTo('#f05-tg4', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.2)' }, 6.5);
+tl.fromTo('#f05-tg5', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.2)' }, 6.7);
+tl.fromTo('#f05-tg6', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.25, ease: 'back.out(1.2)' }, 6.9);
+tl.fromTo('#f05-badge', { opacity: 0, scale: 0.5 }, { opacity: 1, scale: 1, duration: 0.4, ease: 'back.out(1.5)' }, 7.3);
+window.__timelines["f05-tooling"] = tl;
+</script>
+</template>

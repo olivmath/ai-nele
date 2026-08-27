@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1080" />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1080px;
+        overflow: hidden;
+        background: #FAF9F5;
+      }
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="64.872"
+      data-width="1080"
+      data-height="1080"
+      style="background: #FAF9F5;"
+    >
+      <div id="scene-hook" class="clip" data-start="0" data-duration="6.912" data-track-index="1"
+           data-composition-id="f01-hook"
+           data-composition-src="compositions/frames/01-hook.html"
+           data-transition-in="cut">
+      </div>
+
+      <div id="scene-problema" class="clip" data-start="6.912" data-duration="10.032" data-track-index="1"
+           data-composition-id="f02-problema-solidity"
+           data-composition-src="compositions/frames/02-problema-solidity.html"
+           data-transition-in="crossfade">
+      </div>
+
+      <div id="scene-safety" class="clip" data-start="16.944" data-duration="10.344" data-track-index="1"
+           data-composition-id="f03-memory-safety"
+           data-composition-src="compositions/frames/03-memory-safety.html"
+           data-transition-in="crossfade">
+      </div>
+
+      <div id="scene-multichain" class="clip" data-start="27.288" data-duration="11.736" data-track-index="1"
+           data-composition-id="f04-multi-chain"
+           data-composition-src="compositions/frames/04-multi-chain.html"
+           data-transition-in="crossfade">
+      </div>
+
+      <div id="scene-tooling" class="clip" data-start="39.024" data-duration="9.816" data-track-index="1"
+           data-composition-id="f05-tooling"
+           data-composition-src="compositions/frames/05-tooling.html"
+           data-transition-in="crossfade">
+      </div>
+
+      <div id="scene-performance" class="clip" data-start="48.840" data-duration="10.224" data-track-index="1"
+           data-composition-id="f06-performance"
+           data-composition-src="compositions/frames/06-performance.html"
+           data-transition-in="crossfade">
+      </div>
+
+      <div id="scene-landing" class="clip" data-start="59.064" data-duration="5.808" data-track-index="1"
+           data-composition-id="f07-landing"
+           data-composition-src="compositions/frames/07-landing.html"
+           data-transition-in="crossfade">
+      </div>
+
+      <audio id="narration-audio" data-start="0" data-duration="64.872" data-track-index="0"
+             src="narration.wav" preload="auto">
+      </audio>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

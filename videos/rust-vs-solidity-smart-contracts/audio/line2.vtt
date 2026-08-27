@@ -1,0 +1,8 @@
+1
+00:00:00,100 --> 00:00:02,893
+Solidity é a linguagem padrão do Ethereum.
+
+2
+00:00:02,843 --> 00:00:09,979
+Mas ela permite reentrancy attacks, integer overflow, e delegatecall exploits — bugs que o compilador simplesmente não pega.
+

@@ -1,0 +1,29 @@
+Por que Rust é melhor que Solidity para Smart Contracts
+
+Solidity é a linguagem padrão para smart contracts no Ethereum e EVM-compatíveis. Mas ela tem limitações fundamentais que desenvolvedores estão cada vez mais questionando.
+
+1. SEGURANÇA E MEMORY SAFETY
+Solidity permite reentrancy attacks, integer overflow/underflow (antes do 0.8), e delegatecall exploits. Bilhões de dólares foram perdidos por bugs que o compilador não pegou.
+Rust tem ownership model e borrow checker — categorias inteiras de bugs são impossíveis em tempo de compilação. Sem garbage collector, sem null pointers, sem data races.
+
+2. ECOSSISTEMA MULTI-CHAIN
+Solidity funciona apenas no EVM (Ethereum, Polygon, Arbitrum, BSC).
+Rust é a linguagem nativa de Solana (via Anchor), Near Protocol, Polkadot (Substrate/ink!), Cosmos (CosmWasm), e Aptos/Sui (Move é influenciado por Rust). Um dev Rust pode construir em 5+ ecossistemas.
+
+3. TOOLING E DX
+Cargo (package manager do Rust) é considerado o melhor da indústria. Testing integrado, benchmarking, documentação automática.
+Solidity depende de Hardhat/Foundry, com ecossistema fragmentado entre JavaScript e Solidity pura.
+
+4. PERFORMANCE
+Chains baseadas em Rust (Solana: 65k TPS teórico, Near: sharding nativo) processam ordens de magnitude mais transações que o Ethereum (15-30 TPS base layer).
+O runtime de Rust compila para WebAssembly (WASM), que é ~10x mais rápido que EVM bytecode.
+
+5. FUTURO
+Ethereum está explorando eWASM como substituto do EVM. Move (Aptos/Sui) é inspirado em Rust. A tendência é clara: o futuro dos smart contracts fala Rust.
+
+Dados de mercado:
+- Solana TVL: $4B+ (2024)
+- Near TVL: $300M+
+- Polkadot ecosystem: 200+ parachains
+- Rust: linguagem mais amada no Stack Overflow por 8 anos consecutivos
+- Vagas Rust/blockchain: crescimento de 400% desde 2021

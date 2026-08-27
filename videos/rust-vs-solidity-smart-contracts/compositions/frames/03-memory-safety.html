@@ -1,0 +1,61 @@
+<template>
+<style>
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Medium.woff2') format('woff2'); font-weight: 500; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Medium.woff2') format('woff2'); font-weight: 500; }
+
+#root { width: 1080px; height: 1080px; position: relative; overflow: hidden; container-type: inline-size; }
+.f03-bg { position: absolute; inset: 0; background: #FAF9F5; }
+.f03-title { position: absolute; top: 8%; left: 50%; margin-left: -42%; width: 84%; text-align: center; font-family: 'EB Garamond', serif; font-size: 4.6cqw; font-weight: 400; line-height: 1.06; letter-spacing: -0.018em; color: #141413; }
+.f03-coral { color: #CC785C; }
+.f03-card { position: absolute; top: 22%; width: 44%; height: 36%; border-radius: 12px; padding: 2.5cqw; box-sizing: border-box; }
+.f03-card-left { left: 4%; background: #181715; border: 1px solid rgba(250,249,245,0.14); }
+.f03-card-right { right: 4%; background: #FAF9F5; border: 1px solid rgba(20,20,19,0.12); }
+.f03-card-label { font-family: 'JetBrains Mono', monospace; font-size: 1.35cqw; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #CC785C; margin-bottom: 1.5cqw; }
+.f03-code { font-family: 'JetBrains Mono', monospace; font-size: 1.5cqw; font-weight: 400; line-height: 1.6; color: #FAF9F5; white-space: pre; }
+.f03-feat { font-family: 'Inter', sans-serif; font-size: 2cqw; font-weight: 500; line-height: 2.2; color: #141413; }
+.f03-chk { color: #CC785C; margin-right: 0.5cqw; }
+.f03-checklist { position: absolute; top: 64%; left: 50%; margin-left: -35%; width: 70%; text-align: left; }
+.f03-chk-item { font-family: 'Inter', sans-serif; font-size: 2.3cqw; font-weight: 500; line-height: 2; color: #141413; }
+.f03-x { color: #CC785C; font-weight: 700; margin-right: 0.8cqw; }
+</style>
+
+<div data-composition-id="f03-memory-safety" id="root" data-width="1080" data-height="1080">
+  <div class="f03-bg clip" id="f03-bg" data-start="0" data-duration="10.3" data-track-index="0"></div>
+  <div class="f03-title clip" id="f03-title" data-start="0" data-duration="10.3" data-track-index="1">Rust resolve na <span class="f03-coral">raiz</span></div>
+  <div class="f03-card f03-card-left clip" id="f03-left" data-start="0" data-duration="10.3" data-track-index="2">
+    <div class="f03-card-label">Rust code</div>
+    <div class="f03-code"><span style="color:#CC785C">let</span> x = String::from(<span style="color:#CC785C">"value"</span>);
+<span style="color:#CC785C">let</span> y = x;
+<span style="color:rgba(250,249,245,0.4)">// x is no longer valid</span>
+<span style="color:rgba(250,249,245,0.4)">// compiler rejects use</span></div>
+  </div>
+  <div class="f03-card f03-card-right clip" id="f03-right" data-start="0" data-duration="10.3" data-track-index="2">
+    <div class="f03-card-label">Garantias</div>
+    <div class="f03-feat" id="f03-feat1"><span class="f03-chk">✓</span> ownership model</div>
+    <div class="f03-feat" id="f03-feat2"><span class="f03-chk">✓</span> borrow checker</div>
+  </div>
+  <div class="f03-checklist clip" id="f03-checklist" data-start="0" data-duration="10.3" data-track-index="3">
+    <div class="f03-chk-item" id="f03-c1"><span class="f03-x">✗</span> null pointers</div>
+    <div class="f03-chk-item" id="f03-c2"><span class="f03-x">✗</span> data races</div>
+    <div class="f03-chk-item" id="f03-c3"><span class="f03-x">✗</span> memory leaks</div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+tl.fromTo('#f03-title', { opacity: 0, y: 15 }, { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }, 0.2);
+tl.fromTo('#f03-left', { opacity: 0, x: -40, rotationY: 8 }, { opacity: 1, x: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 3.0);
+tl.fromTo('#f03-right', { opacity: 0, x: 40, rotationY: -8 }, { opacity: 1, x: 0, rotationY: 0, duration: 0.6, ease: 'power3.out' }, 3.2);
+tl.fromTo('#f03-feat1', { opacity: 0, x: 15 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 3.8);
+tl.fromTo('#f03-feat2', { opacity: 0, x: 15 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 4.5);
+tl.fromTo('#f03-c1', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 6.2);
+tl.fromTo('#f03-c2', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 7.0);
+tl.fromTo('#f03-c3', { opacity: 0, x: -20 }, { opacity: 1, x: 0, duration: 0.4, ease: 'power3.out' }, 7.8);
+window.__timelines["f03-memory-safety"] = tl;
+</script>
+</template>

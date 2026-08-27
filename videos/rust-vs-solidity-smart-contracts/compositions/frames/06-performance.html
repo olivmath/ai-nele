@@ -1,0 +1,74 @@
+<template>
+<style>
+@font-face { font-family: 'EB Garamond'; src: url('assets/fonts/EBGaramond-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'Inter'; src: url('assets/fonts/Inter-Medium.woff2') format('woff2'); font-weight: 500; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Regular.woff2') format('woff2'); font-weight: 400; }
+@font-face { font-family: 'JetBrains Mono'; src: url('assets/fonts/JetBrainsMono-Medium.woff2') format('woff2'); font-weight: 500; }
+
+#root { width: 1080px; height: 1080px; position: relative; overflow: hidden; container-type: inline-size; }
+.f06-bg { position: absolute; inset: 0; background: #FAF9F5; }
+.f06-title { position: absolute; top: 8%; left: 50%; margin-left: -40%; width: 80%; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.46cqw; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: #CC785C; }
+.f06-chart { position: absolute; top: 16%; left: 10%; width: 80%; height: 52%; }
+.f06-bar-grp { position: absolute; bottom: 0; width: 35%; text-align: center; }
+.f06-sol-grp { left: 10%; }
+.f06-eth-grp { right: 10%; }
+.f06-bar { width: 100%; border-radius: 8px 8px 0 0; }
+.f06-sol-bar { height: 0; background: #CC785C; }
+.f06-eth-bar { height: 0; background: #141413; opacity: 0.3; }
+.f06-val { position: absolute; top: -4cqw; left: 50%; font-family: 'EB Garamond', serif; font-size: 5cqw; font-weight: 400; line-height: 1; white-space: nowrap; }
+.f06-sol-val { color: #CC785C; }
+.f06-eth-val { color: #141413; }
+.f06-lbl { margin-top: 1.5cqw; font-family: 'Inter', sans-serif; font-size: 2cqw; font-weight: 500; color: #141413; }
+.f06-mult { position: absolute; top: 42%; left: 50%; margin-left: -80px; width: 160px; text-align: center; font-family: 'EB Garamond', serif; font-size: 4cqw; color: #CC785C; }
+.f06-unit { position: absolute; top: 72%; left: 50%; margin-left: -35%; width: 70%; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 1.35cqw; color: rgba(20,20,19,0.5); }
+</style>
+
+<div data-composition-id="f06-performance" id="root" data-width="1080" data-height="1080">
+  <div class="f06-bg clip" id="f06-bg" data-start="0" data-duration="10.2" data-track-index="0"></div>
+  <div class="f06-title clip" id="f06-title" data-start="0" data-duration="10.2" data-track-index="1">TPS</div>
+  <div class="f06-chart clip" id="f06-chart" data-start="0" data-duration="10.2" data-track-index="2">
+    <div class="f06-bar-grp f06-sol-grp">
+      <div class="f06-bar f06-sol-bar" id="f06-sbar">
+        <div class="f06-val f06-sol-val" id="f06-sval" style="margin-left:-30px">0</div>
+      </div>
+      <div class="f06-lbl" id="f06-slbl">Solana</div>
+    </div>
+    <div class="f06-bar-grp f06-eth-grp">
+      <div class="f06-bar f06-eth-bar" id="f06-ebar">
+        <div class="f06-val f06-eth-val" id="f06-eval" style="margin-left:-10px">0</div>
+      </div>
+      <div class="f06-lbl" id="f06-elbl">Ethereum</div>
+    </div>
+  </div>
+  <div class="f06-mult clip" id="f06-mult" data-start="0" data-duration="10.2" data-track-index="3">~4,333x</div>
+  <div class="f06-unit clip" id="f06-unit" data-start="0" data-duration="10.2" data-track-index="4">WASM vs EVM bytecode</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
+<script>
+window.__timelines = window.__timelines || {};
+const tl = gsap.timeline({ paused: true });
+const sc = { val: 0 };
+const ec = { val: 0 };
+const sv = document.getElementById('f06-sval');
+const ev = document.getElementById('f06-eval');
+
+tl.fromTo('#f06-title', { opacity: 0, y: -10 }, { opacity: 1, y: 0, duration: 0.4, ease: 'power3.out' }, 0.2);
+tl.fromTo('#f06-slbl', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.6);
+tl.fromTo('#f06-elbl', { opacity: 0 }, { opacity: 1, duration: 0.3 }, 0.8);
+
+tl.fromTo('#f06-sval', { opacity: 0 }, { opacity: 1, duration: 0.2 }, 3.0);
+tl.fromTo('#f06-sbar', { height: 0 }, { height: '90%', duration: 2.5, ease: 'power3.out' }, 3.0);
+tl.to(sc, { val: 65000, duration: 2.5, ease: 'power3.out', onUpdate: function() { sv.textContent = Math.round(sc.val).toLocaleString('en-US'); } }, 3.0);
+
+tl.fromTo('#f06-eval', { opacity: 0 }, { opacity: 1, duration: 0.2 }, 6.2);
+tl.fromTo('#f06-ebar', { height: 0 }, { height: '1.2%', duration: 1.5, ease: 'power3.out' }, 6.2);
+tl.to(ec, { val: 15, duration: 1.5, ease: 'power3.out', onUpdate: function() { ev.textContent = Math.round(ec.val); } }, 6.2);
+
+tl.fromTo('#f06-mult', { opacity: 0, scale: 0.7 }, { opacity: 1, scale: 1, duration: 0.5, ease: 'back.out(1.3)' }, 8.5);
+tl.fromTo('#f06-unit', { opacity: 0 }, { opacity: 1, duration: 0.4 }, 9.0);
+
+window.__timelines["f06-performance"] = tl;
+</script>
+</template>
