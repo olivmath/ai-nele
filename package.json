@@ -1,0 +1,14 @@
+{
+  "scripts": {
+    "build:carousels": "node carousel/build.mjs",
+    "generate:pdfs": "node generate-pdfs.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.2",
+    "puppeteer": "^24.43.1"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  }
+}

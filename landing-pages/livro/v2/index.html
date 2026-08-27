@@ -120,6 +120,29 @@
         dialog.hack-modal::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(8px); }
         .hack-modal pre { white-space: pre-wrap; background: #060606; border: 1px solid rgba(255,255,255,.1); }
 
+        .book-asset-frame {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(204,255,0,.12), rgba(255,255,255,.03));
+            border: 1px solid rgba(255,255,255,.14);
+        }
+
+        .book-asset-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, transparent 35%, rgba(204,255,0,.08));
+        }
+
+        .book-asset-image { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+        .book-asset-image.is-missing { display: none; }
+        .book-asset-fallback { display: none; position: absolute; inset: 0; z-index: 2; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
+        .book-asset-fallback.is-visible { display: flex; }
+        .book-cover-frame { aspect-ratio: 4 / 5; border-radius: 2.5rem; box-shadow: -22px 28px 0 rgba(204,255,0,.08), 0 28px 80px rgba(0,0,0,.5); transform: perspective(1200px) rotateY(-8deg) rotateX(2deg); image-rendering: auto; backface-visibility: hidden; will-change: transform; -webkit-backface-visibility: hidden; }
+        .book-spread-frame { aspect-ratio: 4 / 3; border-radius: 1.5rem; }
+        .book-offer-frame { width: min(11rem, 32%); min-width: 7rem; aspect-ratio: 4 / 5; border-radius: 1.25rem; flex: none; transform: rotate(-4deg); image-rendering: auto; }
+
         .vsl-pip {
             position: fixed !important;
             right: 2rem;
@@ -153,11 +176,20 @@
             #site-shell { margin: 0; border-radius: 0; }
             #site-shell .px-12 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
             #site-shell section.py-24 { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+            #site-shell section.pt-48 { padding-top: 7rem; }
             .hero-title { font-size: clamp(2.8rem, 13vw, 3.5rem); letter-spacing: -.055em; }
             h1, h2, h3, p, li, span, a, button { overflow-wrap: anywhere; }
             .tracking-tech { letter-spacing: .12em; }
             summary > div { min-width: 0; }
             summary h3 { font-size: 1rem !important; }
+            .book-cover-frame { transform: none; box-shadow: 0 16px 60px rgba(0,0,0,.5); border-radius: 1.5rem; max-width: 16rem; margin: 0 auto; }
+            .glass.p-12 { padding: 1.5rem !important; }
+            .glass.p-8 { padding: 1.25rem !important; }
+            footer .text-\[9rem\] { font-size: 3rem !important; }
+            #sticky-cta { bottom: 1rem; right: 1rem; left: 1rem; }
+            #sticky-cta a { width: 100%; justify-content: center; padding: 1rem; font-size: 1rem; }
+            dialog.hack-modal { border-radius: 1.25rem; }
+            dialog.hack-modal article { padding: 1.25rem !important; }
         }
 
         @media (prefers-reduced-motion: reduce) {
@@ -175,10 +207,6 @@
         <!-- 1. Navegação -->
         <header class="fixed top-12 left-1/2 -translate-x-1/2 z-50 w-full max-w-[1500px] px-8" data-sd-id="3">
             <nav class="flex items-center justify-between" data-sd-id="4">
-                <a href="#" id="nav-logo" class="w-12 h-12 bg-[#ccff00] rounded-xl flex items-center justify-center text-black font-bold text-2xl transition-transform hover:scale-105" data-sd-id="5">
-                    S
-                </a>
-
                 <div class="glass px-8 py-3 rounded-full hidden md:flex items-center gap-8" data-sd-id="6">
                     <a href="#livro" id="nav-link-mockups" class="text-white/70 hover:text-[#ccff00] transition-colors font-medium" data-sd-id="7">Livro</a>
                     <a href="#problema" id="nav-link-problema" class="text-white/70 hover:text-[#ccff00] transition-colors font-medium" data-sd-id="8">Por que ler?</a>
@@ -191,15 +219,12 @@
                         <span class="w-2 h-2 rounded-full bg-[#ccff00] pulse-lime" data-sd-id="13"></span>
                         <span class="text-white/60" data-sd-id="14">Network: Mainnet Ready</span>
                     </div>
-                    <a href="#oferta" id="nav-cta-btn" class="bg-white text-black px-6 py-2 rounded-full font-bold text-sm hover:bg-[#ccff00] transition-all lime-shadow" data-sd-id="15">
-                        Pré-venda
-                    </a>
                 </div>
             </nav>
         </header>
 
         <!-- 2. Hero Section -->
-        <section id="livro" class="pt-48 pb-24 px-12 lg:px-24" data-sd-id="16">
+        <section id="livro" class="pt-28 sm:pt-48 pb-24 px-12 lg:px-24" data-sd-id="16">
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center" data-sd-id="17">
                 <div class="lg:col-span-7" data-sd-id="18">
                     <span class="font-mono text-[#ccff00] text-xs uppercase tracking-tech mb-6 block" data-sd-id="19">[ Engine: Secure Solidity 0.8.20 ]</span>
@@ -216,24 +241,38 @@
                     </div>
                 </div>
 
-                <div class="lg:col-span-5 relative" data-sd-id="26">
-                    <div id="vsl-player" class="glass aspect-[4/5] rounded-[2.5rem] relative overflow-hidden group" data-sd-id="27">
-                        <div class="absolute inset-0 bg-gradient-to-tr from-[#ccff00]/10 to-transparent" data-sd-id="28"></div>
-                        <div class="absolute inset-0 p-3" data-sd-id="29">
-                            <video class="w-full h-full rounded-[2rem] object-cover bg-black" autoplay muted playsinline controls preload="metadata" aria-label="VSL Smartcontract Engineer - Solidity">
-                                <source src="../assets/tenham-em-mente.mp4" type="video/mp4">
-                                Seu navegador não suporta vídeo em MP4.
-                            </video>
-                        </div>
+                <div class="lg:col-span-5 relative flex justify-center lg:justify-end" data-sd-id="26">
+                    <figure data-book-mockup="hero" class="book-asset-frame book-cover-frame w-full max-w-md float-anim" aria-label="Mockup da capa do livro Smartcontract Engineer - Solidity">
+                        <img src="../assets/book-cover-mockup.png" alt="Mockup da capa do livro Smartcontract Engineer - Solidity" class="book-asset-image" onerror="this.classList.add('is-missing'); this.nextElementSibling.classList.add('is-visible')">
+                        <figcaption class="book-asset-fallback">
+                            <div><iconify-icon icon="lucide:book-copy" class="text-5xl text-[#ccff00] mb-4"></iconify-icon><p class="font-mono text-xs uppercase tracking-tech text-[#ccff00]">Mockup da capa</p><p class="text-sm text-white/50 mt-2">../assets/book-cover-mockup.png</p></div>
+                        </figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
 
-                        <!-- Floating Label -->
-                        <div class="vsl-label absolute bottom-8 right-8 bg-[#ccff00] text-black font-mono text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-2 shadow-xl" data-sd-id="38">
-                            <iconify-icon icon="lucide:play"></iconify-icon>
-                            VSL · REPRODUZINDO
-                        </div>
-                        <button id="vsl-pip-close" type="button" class="vsl-pip-close hidden absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/80 text-white items-center justify-center hover:bg-[#ccff00] hover:text-black" aria-label="Fechar vídeo flutuante">✕</button>
-                        <button id="vsl-pip-drag" type="button" class="vsl-pip-drag hidden absolute top-3 left-3 z-10 h-8 px-3 rounded-full bg-black/80 text-white items-center gap-2 font-mono text-[9px] uppercase tracking-tech cursor-grab" aria-label="Arrastar vídeo flutuante"><iconify-icon icon="lucide:grip-horizontal"></iconify-icon> Arrastar</button>
+        <!-- 3. VSL -->
+        <section id="vsl" class="py-24 px-12 lg:px-24 bg-black/25">
+            <div class="grid grid-cols-1 lg:grid-cols-[1.25fr_.75fr] gap-10 lg:gap-16 items-center max-w-6xl mx-auto">
+                <div id="vsl-player" class="glass aspect-[4/5] sm:aspect-[9/14] md:aspect-video rounded-[2.5rem] relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-[#ccff00]/10 to-transparent"></div>
+                    <div class="absolute inset-0 p-3">
+                        <video class="w-full h-full rounded-[2rem] object-cover bg-black" muted playsinline controls preload="metadata" aria-label="VSL Smartcontract Engineer - Solidity">
+                            <!-- source será adicionado quando o .mp4 estiver pronto -->
+                        </video>
                     </div>
+                    <div class="vsl-label absolute bottom-8 right-8 bg-[#ccff00] text-black font-mono text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-2 shadow-xl">
+                        <iconify-icon icon="lucide:play"></iconify-icon>
+                        VSL · REPRODUZINDO
+                    </div>
+                    <button id="vsl-pip-close" type="button" class="vsl-pip-close hidden absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/80 text-white items-center justify-center hover:bg-[#ccff00] hover:text-black" aria-label="Fechar vídeo flutuante">✕</button>
+                    <button id="vsl-pip-drag" type="button" class="vsl-pip-drag hidden absolute top-3 left-3 z-10 h-8 px-3 rounded-full bg-black/80 text-white items-center gap-2 font-mono text-[9px] uppercase tracking-tech cursor-grab" aria-label="Arrastar vídeo flutuante"><iconify-icon icon="lucide:grip-horizontal"></iconify-icon> Arrastar</button>
+                </div>
+                <div>
+                    <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-5">Assista antes de decidir</p>
+                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mb-6">Entenda por que este livro começa pela <span class="text-[#ccff00]">segurança.</span></h2>
+                    <p class="text-white/60 text-lg leading-relaxed">Em poucos minutos, veja a proposta da formação, a profundidade do material e para quem esta edição foi construída.</p>
                 </div>
             </div>
         </section>
@@ -242,7 +281,7 @@
         <section id="problema" class="py-24" data-sd-id="59">
             <div class="px-12 lg:px-24 max-w-4xl" data-sd-id="60">
                 <span class="font-mono text-xs uppercase tracking-tech text-[#ccff00]">Histórias que moldaram a indústria</span>
-                <h2 class="text-5xl font-bold leading-tight mt-6 mb-5" data-sd-id="62">O material hoje não ensina a <span class="text-[#ccff00]" data-sd-id="63">realidade.</span></h2>
+                <h2 class="text-3xl sm:text-5xl font-bold leading-tight mt-6 mb-5" data-sd-id="62">O material hoje não ensina a <span class="text-[#ccff00]" data-sd-id="63">realidade.</span></h2>
                 <p class="text-white/60">Tutoriais rasos não te preparam para os milhões em jogo. A história mostra o preço de ignorar segurança.</p>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 px-12 lg:px-24">
@@ -283,7 +322,7 @@
                         <div class="w-full aspect-square bg-[#1a1a1a] rounded-2xl overflow-hidden" data-sd-id="110">
                             <img src="../assets/lucas.png" alt="Lucas Oliveira" class="w-full h-full object-cover object-center" data-sd-id="111">
                         </div>
-                        <div class="absolute -bottom-8 -right-8 glass p-6 rounded-2xl lime-shadow" data-sd-id="112">
+                        <div class="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 glass p-4 sm:p-6 rounded-2xl lime-shadow" data-sd-id="112">
                             <span class="text-4xl font-bold text-[#ccff00]" data-sd-id="113">7x</span>
                             <p class="text-xs font-mono uppercase tracking-tech text-white/60" data-sd-id="114">Hackathons Vencidos</p>
                         </div>
@@ -328,7 +367,7 @@
         <!-- 7. Método -->
         <section id="metodo" class="py-24 px-12 lg:px-24" data-sd-id="157">
             <div class="text-center mb-20" data-sd-id="158">
-                <h2 class="text-5xl font-bold mb-6 italic" data-sd-id="159">O Método <span class="text-[#ccff00]" data-sd-id="160">Solidity-Safe Approach</span></h2>
+                <h2 class="text-3xl sm:text-5xl font-bold mb-6 italic" data-sd-id="159">O Método <span class="text-[#ccff00]" data-sd-id="160">Solidity-Safe Approach</span></h2>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-sd-id="161">
                 <div class="glass p-10 rounded-[2.5rem] relative group hover:border-[#ccff00]/50 transition-all" data-sd-id="162">
@@ -385,32 +424,63 @@
             </div>
         </section>
 
-        <!-- 9. Oferta -->
+        <!-- 10. Oferta -->
         <section id="oferta" class="py-24 px-12 lg:px-24" data-sd-id="228">
             <div class="glass p-8 md:p-12 lg:p-16 rounded-[3rem] relative overflow-hidden" data-sd-id="229">
-                <div class="grid grid-cols-1 lg:grid-cols-[1.35fr_.65fr] gap-10 lg:gap-16 items-stretch" data-sd-id="232">
-                    <div data-sd-id="233">
-                        <div class="flex items-center gap-3 mb-5">
-                            <span class="bg-[#ccff00] text-black px-4 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-tech">EDIÇÃO LIMITADA</span>
-                            <span class="font-mono text-[10px] uppercase tracking-tech text-white/40">Pré-venda 2026</span>
+                <!-- Header com badges e título -->
+                <div class="mb-10">
+                    <div class="flex flex-wrap items-center gap-3 mb-6">
+                        <span class="bg-[#ccff00] text-black px-4 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-tech">EDIÇÃO LIMITADA</span>
+                        <span class="font-mono text-[10px] uppercase tracking-tech text-white/40">Pré-venda 2026</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold italic leading-[.95]">Segurança não é um capítulo. <span class="text-[#ccff00]">É o livro inteiro.</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-stretch">
+                    <!-- Esquerda: capa + features -->
+                    <div class="flex flex-col gap-8">
+                        <div class="flex items-center gap-6">
+                            <figure data-book-mockup="compact" class="book-asset-frame book-offer-frame" aria-label="Mockup compacto da capa do livro">
+                                <img src="../assets/book-cover-mockup.png" alt="Capa do livro Smartcontract Engineer - Solidity" class="book-asset-image" loading="lazy" onerror="this.classList.add('is-missing'); this.nextElementSibling.classList.add('is-visible')">
+                                <figcaption class="book-asset-fallback"><iconify-icon icon="lucide:book-copy" class="text-3xl text-[#ccff00]"></iconify-icon></figcaption>
+                            </figure>
+                            <div>
+                                <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-2">Smartcontract Engineer - Solidity</p>
+                                <p class="text-white/50 text-sm">Livro físico · Capa dura premium · Edição numerada</p>
+                            </div>
                         </div>
-                        <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-4">Smartcontract Engineer - Solidity</p>
-                        <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 italic leading-[.95]" data-sd-id="234">Segurança não é um capítulo. <span class="text-[#ccff00]">É o livro inteiro.</span></h2>
-                        <ul class="grid md:grid-cols-3 gap-3 mb-10" data-sd-id="236">
-                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5"><iconify-icon icon="lucide:book-open" class="block text-2xl text-[#ccff00] mb-4"></iconify-icon><strong class="block mb-1">Edição física</strong><span class="text-sm text-white/50">Capa dura premium</span></li>
-                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5"><iconify-icon icon="lucide:layers-3" class="block text-2xl text-[#ccff00] mb-4"></iconify-icon><strong class="block mb-1">Conteúdo denso</strong><span class="text-sm text-white/50">25 capítulos + 5 apêndices</span></li>
-                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5"><iconify-icon icon="lucide:shield-check" class="block text-2xl text-[#ccff00] mb-4"></iconify-icon><strong class="block mb-1">Casos reais</strong><span class="text-sm text-white/50">24 estudos de hacking</span></li>
+                        <ul class="grid grid-cols-3 gap-2 sm:gap-3">
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5 text-center">
+                                <iconify-icon icon="lucide:book-open" class="block text-2xl text-[#ccff00] mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-2xl font-bold mb-1">25</strong>
+                                <span class="text-xs text-white/50">Capítulos</span>
+                            </li>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5 text-center">
+                                <iconify-icon icon="lucide:shield-check" class="block text-2xl text-[#ccff00] mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-2xl font-bold mb-1">24</strong>
+                                <span class="text-xs text-white/50">Casos de hacking</span>
+                            </li>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5 text-center">
+                                <iconify-icon icon="lucide:layers-3" class="block text-2xl text-[#ccff00] mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-2xl font-bold mb-1">15</strong>
+                                <span class="text-xs text-white/50">Contratos práticos</span>
+                            </li>
                         </ul>
                     </div>
 
-                    <div id="form-container" class="bg-[#111] p-8 lg:p-10 rounded-[2.5rem] border border-[#25D366]/30 flex flex-col justify-between" data-sd-id="244">
+                    <!-- Direita: CTA WhatsApp -->
+                    <div id="form-container" class="bg-[#111] p-8 lg:p-10 rounded-[2.5rem] border border-[#25D366]/30 flex flex-col justify-between">
                         <div>
-                            <div data-price-placement="checkout" class="mb-8"><p class="font-mono text-[10px] uppercase tracking-tech text-[#25D366] mb-2">Pré-venda a partir de</p><div class="flex items-baseline gap-3"><span class="text-5xl font-bold">R$ 300</span><span class="text-white/40 text-sm">ou 12x de R$ 30</span></div></div>
                             <p class="font-mono text-[10px] uppercase tracking-tech text-[#25D366] mb-3">Canal oficial</p>
-                            <h3 class="text-3xl font-bold mb-4" data-sd-id="245">Entre na pré-venda</h3>
-                            <p class="text-white/60 mb-8" data-sd-id="246">Receba condições, avisos e os próximos passos no grupo oficial do WhatsApp.</p>
+                            <h3 class="text-3xl font-bold mb-4">Entre na pré-venda</h3>
+                            <p class="text-white/60 mb-6">Receba condições, avisos e os próximos passos no grupo oficial do WhatsApp.</p>
+                            <ul class="space-y-3 text-sm text-white/50 mb-8">
+                                <li class="flex items-center gap-3"><iconify-icon icon="lucide:check-circle" class="text-[#25D366]"></iconify-icon> Preço exclusivo de pré-venda</li>
+                                <li class="flex items-center gap-3"><iconify-icon icon="lucide:check-circle" class="text-[#25D366]"></iconify-icon> Acesso antecipado a conteúdo</li>
+                                <li class="flex items-center gap-3"><iconify-icon icon="lucide:check-circle" class="text-[#25D366]"></iconify-icon> Comunidade de engenheiros</li>
+                            </ul>
                         </div>
-                        <a href="https://chat.whatsapp.com/BJFT74hyF2WDEDEkiXZqIx" target="_blank" rel="noopener noreferrer" class="w-full bg-[#25D366] text-black font-bold py-5 px-6 rounded-2xl text-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                        <a href="https://chat.whatsapp.com/CRsAIJprw7IAVCdn8YJ2dh" target="_blank" rel="noopener noreferrer" class="w-full bg-[#25D366] text-black font-bold py-5 px-6 rounded-2xl text-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
                             <iconify-icon icon="fa6-brands:whatsapp" class="text-2xl"></iconify-icon>
                             Entrar no grupo de pré-venda <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
                         </a>
@@ -463,6 +533,42 @@
                             O livro contém QR codes que levam a repositórios exclusivos com todo o código fonte, testes e scripts de deploy.
                         </div>
                     </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">O livro tem versão digital (e-book)?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            A primeira edição é exclusivamente física, em capa dura. Uma versão digital pode ser considerada no futuro, mas o foco agora é a experiência premium do livro impresso.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">Qual a diferença deste livro para cursos online de Solidity?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            A segurança é o eixo central desde o primeiro capítulo, não um módulo isolado. Cada conceito é apresentado junto com os vetores de ataque reais e as defesas correspondentes, algo que cursos online raramente cobrem com essa profundidade.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">Preciso ter experiência com blockchain para começar?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            Não. Os primeiros capítulos cobrem fundamentos de blockchain, Ethereum e a EVM do zero. O livro foi feito para desenvolvedores Web2 que querem fazer a transição para Web3.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">O livro é entregue para todo o Brasil?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            Sim. A logística cobre todo o território nacional. Detalhes sobre prazos e frete serão compartilhados no grupo de pré-venda do WhatsApp.
+                        </div>
+                    </details>
                 </div>
             </div>
         </section>
@@ -492,7 +598,7 @@
 
         <!-- Sticky CTA -->
         <div id="sticky-cta" class="fixed bottom-8 right-8 z-50 transition-all duration-500 translate-y-24 opacity-0" data-sd-id="307">
-            <a href="https://chat.whatsapp.com/BJFT74hyF2WDEDEkiXZqIx" target="_blank" rel="noopener noreferrer" id="sticky-cta-btn" class="bg-[#ccff00] text-black font-bold py-4 px-8 rounded-full flex items-center gap-3 lime-shadow hover:scale-105 transition-all" data-sd-id="308">
+            <a href="https://chat.whatsapp.com/CRsAIJprw7IAVCdn8YJ2dh" target="_blank" rel="noopener noreferrer" id="sticky-cta-btn" class="bg-[#ccff00] text-black font-bold py-4 px-8 rounded-full flex items-center gap-3 lime-shadow hover:scale-105 transition-all" data-sd-id="308">
                 Entrar na pré-venda
                 <iconify-icon icon="lucide:chevron-right"></iconify-icon>
             </a>
@@ -554,9 +660,11 @@
         }
 
         function updateVslPip() {
-            const heroRect = document.getElementById('livro').getBoundingClientRect();
+            if (window.innerWidth < 768) return;
+            const vslSection = document.getElementById('vsl');
+            const sectionRect = vslSection.getBoundingClientRect();
             if (vslPipActive) {
-                if (heroRect.top >= -80) {
+                if (sectionRect.top >= -80) {
                     vslPipDismissed = false;
                     leaveVslPip();
                 }
@@ -565,7 +673,7 @@
             const playerRect = vslPlayer.getBoundingClientRect();
             const shouldDetach = playerRect.top <= 96 && playerRect.bottom > 140;
             if (!shouldDetach) {
-                if (heroRect.top >= -80) vslPipDismissed = false;
+                if (sectionRect.top >= -80) vslPipDismissed = false;
                 return;
             }
             if (!vslPipDismissed && !vslPipActive) animateVslIntoPip();
