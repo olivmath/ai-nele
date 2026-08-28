@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react'
-import { CarouselViewer } from './CarouselViewer'
+import React, { useState } from 'react'
+import { IncidentDeck } from './components/IncidentDeck'
 import SmartcontractDaoSlides from '@smartcontract-dao-slides'
 
 import theDao from '../data/the-dao.json'
@@ -23,19 +23,6 @@ const carousels = [
 export function App() {
   const [selected, setSelected] = useState(0)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [scale, setScale] = useState(1)
-
-  useEffect(() => {
-    const fit = () => {
-      const vw = window.innerWidth
-      const vh = window.innerHeight
-      const s = Math.min((vw - 80) / 1080, (vh - 80) / 1350, 1)
-      setScale(s)
-    }
-    fit()
-    window.addEventListener('resize', fit)
-    return () => window.removeEventListener('resize', fit)
-  }, [])
 
   const pick = (i) => {
     setSelected(i)
@@ -77,12 +64,10 @@ export function App() {
         </nav>
       </aside>
 
-      <main className={selected === 0 ? 'dao-showcase' : 'viewer'}>
-        {selected === 0 ? <SmartcontractDaoSlides /> : (
-          <div className="viewer-scale" style={{ transform: `scale(${scale})` }}>
-            <CarouselViewer carousel={carousels[selected]} key={selected} />
-          </div>
-        )}
+      <main className="dao-showcase">
+        {selected === 0
+          ? <SmartcontractDaoSlides />
+          : <IncidentDeck incident={carousels[selected]} key={carousels[selected].slug} />}
       </main>
     </div>
   )

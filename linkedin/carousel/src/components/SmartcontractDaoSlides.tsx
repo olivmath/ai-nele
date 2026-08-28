@@ -85,12 +85,12 @@ export default function SmartcontractDaoSlides() {
           <div className="my-auto">
             <Eyebrow>Relatório de incidente · Ethereum</Eyebrow>
             <h1 className="max-w-5xl text-5xl font-bold italic leading-[0.92] tracking-[-0.06em] md:text-8xl">
-              O hack de contrato inteligente que custou <span className="text-red-500">~US$ 9 Bilhões.</span>
+              O hack do Ethereum que custou <span className="text-red-500">≈ US$ 9 Bilhões.</span>
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-relaxed text-white/55">Em 17 de junho de 2016, uma função mal ordenada drenou 3,6 milhões de ETH — hoje, cerca de US$ 9 bilhões — e obrigou uma blockchain inteira a reescrever seu próprio passado.</p>
             <div className="mt-12 grid border-t border-white/10 sm:grid-cols-3">
-              {[["~US$ 9 bi", "valor hoje"], ["3.6M", "ETH drenados"], ["1 linha", "abriu a reentrância"]].map(([n, l]) => (
-                <div key={l} className="border-b border-white/10 p-5 sm:border-r lg:border-b-0 last:border-r-0"><strong className={`block font-mono text-3xl ${l === 'abriu a reentrância' ? 'text-red-500' : 'text-[#ccff00]'}`}>{n}</strong><span className="mt-2 block text-sm text-white/40">{l}</span></div>
+              {[["~US$ 9 bi", "valor hoje"], ["3.6M", "ETH drenados"], ["REENTRÂNCIA", "tipo de ataque"]].map(([n, l]) => (
+                <div key={l} className="border-b border-white/10 p-5 sm:border-r lg:border-b-0 last:border-r-0"><strong className={`block font-mono text-3xl ${l === 'tipo de ataque' ? 'text-red-500' : 'text-[#ccff00]'}`}>{n}</strong><span className="mt-2 block text-sm text-white/40">{l}</span></div>
               ))}
             </div>
           </div>
@@ -102,7 +102,7 @@ export default function SmartcontractDaoSlides() {
           <p className="mt-5 max-w-3xl text-lg text-white/50">The DAO era um fundo sem gestor. A ideia era boa. O código que a sustentava, não.</p>
           <div className="mt-10 grid flex-1 gap-3 md:grid-cols-4">
             {timeline.map(([date, title, copy], i) => (
-              <Card key={title} className={`rounded-2xl border-white/10 bg-white/[0.035] text-white ${i === 2 ? "border-red-500/40 shadow-[inset_3px_0_0_#ef4444]" : "shadow-[inset_3px_0_0_#ccff00]"}`}>
+              <Card key={title} className={`rounded-2xl border border-white/10 bg-white/[0.035] text-white ${i === 2 ? "border-red-500/40 bg-red-500/[0.035]" : ""}`}>
                 <CardContent className="p-5"><span className={`font-mono text-[10px] uppercase tracking-widest ${i === 2 ? "text-red-400" : "text-[#ccff00]"}`}>{date}</span><h3 className="mt-5 text-xl font-bold">{title}</h3><p className="mt-3 text-sm leading-relaxed text-white/50">{copy}</p></CardContent>
               </Card>
             ))}
@@ -139,13 +139,17 @@ export default function SmartcontractDaoSlides() {
                 {lessons.map(([num, title, copy]) => <div key={num} className="grid grid-cols-[42px_1fr] gap-4 border-t border-white/10 py-4"><span className="font-mono text-[#ccff00]">{num}</span><div><h3 className="font-bold">{title}</h3><p className="mt-1 text-sm leading-relaxed text-white/45">{copy}</p></div></div>)}
               </div>
             </div>
-            <Card className="overflow-hidden rounded-[2rem] border border-[#ccff00]/25 bg-gradient-to-br from-[#ccff00]/10 to-white/[0.025] text-white shadow-[0_0_50px_rgba(204,255,0,.08)]">
-              <CardContent className="flex h-full flex-col p-7 md:p-8">
+            <Card className="relative overflow-hidden rounded-[2rem] border border-[#ccff00]/25 bg-gradient-to-br from-[#ccff00]/10 to-white/[0.025] text-white shadow-[0_0_50px_rgba(204,255,0,.08)]">
+              <CardContent className="relative flex h-full flex-col p-7 md:p-8">
                 <span className="w-fit rounded-full bg-[#ccff00] px-3 py-1.5 font-mono text-[10px] font-bold uppercase tracking-[0.14em] text-black">Leitura recomendada</span>
-                <img src={bookCover} alt="Capa do livro Smartcontract Engineer — Solidity" className="mx-auto my-6 block w-[min(100%,11rem)] rounded-lg shadow-[0_24px_50px_rgba(0,0,0,.55)]"/>
-                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#ccff00]">Smartcontract Engineer · Solidity</p>
-                <h3 className="mt-3 max-w-[17rem] text-2xl font-bold leading-[1.05] tracking-tight">Aprenda Solidity. Não seja <span className="text-red-500">hackeado.</span></h3>
-                <a href="https://soliditybook.vercel.app" target="_blank" rel="noreferrer" className="mt-auto inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#ccff00] px-5 py-3 font-bold text-black shadow-[0_0_30px_rgba(204,255,0,.25)] transition-colors hover:bg-[#dcff4d]">Garantir meu exemplar <ArrowRight className="size-4" /></a>
+                <div className="relative my-5 flex flex-1 items-center justify-center overflow-hidden rounded-2xl border border-[#ccff00]/15 bg-black/30">
+                  <div className="absolute inset-0 bg-[linear-gradient(rgba(204,255,0,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(204,255,0,.05)_1px,transparent_1px)] bg-[size:24px_24px]" />
+                  <div className="absolute size-48 rounded-full bg-[#ccff00]/20 blur-3xl" />
+                  <img src={bookCover} alt="Capa do livro Smartcontract Engineer — Solidity" className="relative z-10 max-h-[15rem] max-w-[10rem] rounded-lg shadow-[0_24px_50px_rgba(0,0,0,.55)]" />
+                </div>
+                <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#ccff00]">Smartcontract Engineer · edição física</p>
+                <h3 className="mt-3 text-center text-2xl font-bold leading-[1.05] tracking-tight">Aprenda Solidity do jeito certo e não seja <span className="text-red-500">hackeado.</span></h3>
+                <a href="https://soliditybook.vercel.app" target="_blank" rel="noreferrer" className="mt-5 inline-flex w-full shrink-0 items-center justify-center gap-2 rounded-full bg-[#ccff00] px-5 py-3 font-bold text-black shadow-[0_0_30px_rgba(204,255,0,.25)] transition-colors hover:bg-[#dcff4d]">Garantir meu exemplar <ArrowRight className="size-4" /></a>
               </CardContent>
             </Card>
           </div>

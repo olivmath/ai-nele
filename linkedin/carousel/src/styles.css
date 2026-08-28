@@ -883,6 +883,19 @@ body { font-family: 'Space Grotesk', Arial, sans-serif; }
 .solidity-diff-wrapper .hljs-params,
 .solidity-diff-wrapper .hljs-variable { color: #50fa7b !important; }
 
+/* Dracula tokens emitted by @git-diff-view's lowlight renderer. */
+.solidity-diff-wrapper .hljs-attr,
+.solidity-diff-wrapper .hljs-property,
+.solidity-diff-wrapper .hljs-title.class_,
+.solidity-diff-wrapper .hljs-function { color: #8be9fd !important; }
+.solidity-diff-wrapper .hljs-built_in,
+.solidity-diff-wrapper .hljs-symbol,
+.solidity-diff-wrapper .hljs-variable.language_ { color: #50fa7b !important; }
+.solidity-diff-wrapper .hljs-meta,
+.solidity-diff-wrapper .hljs-meta-keyword { color: #ff79c6 !important; }
+.solidity-diff-wrapper .hljs-subst { color: #f8f8f2 !important; }
+.solidity-diff-wrapper .diff-line-syntax-raw { color: #f8f8f2; }
+
 .viewer-scale {
   transform-origin: center center;
 }

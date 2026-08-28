@@ -1,6 +1,7 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { DiffView, DiffModeEnum } from '@git-diff-view/react'
 import { generateDiffFile } from '@git-diff-view/file'
+import { getDiffViewHighlighter } from '@git-diff-view/shiki'
 import '@git-diff-view/react/styles/diff-view.css'
 import { Card } from './dao-adapters'
 
@@ -40,25 +41,41 @@ contract TheDao {
     }
 }`
 
-export function SolidityCodeBlock() {
+export function SecurityDiff({
+  filename = 'contracts/TheDao.sol',
+  label = 'Security fix · Checks–Effects–Interactions',
+  vulnerable = vulnerableContract,
+  corrected = correctedContract,
+  language = 'solidity',
+}) {
+  const [shikiHighlighter, setShikiHighlighter] = useState(null)
+
+  useEffect(() => {
+    let mounted = true
+    getDiffViewHighlighter(['solidity']).then((highlighter) => {
+      if (mounted) setShikiHighlighter(highlighter)
+    })
+    return () => { mounted = false }
+  }, [])
+
   const diffFile = useMemo(() => {
     const file = generateDiffFile(
-      'contracts/TheDao.sol', vulnerableContract,
-      'contracts/TheDao.sol', correctedContract,
-      'solidity', 'solidity',
+      filename, vulnerable,
+      filename, corrected,
+      language, language,
     )
     file.initTheme('dark')
     file.init()
     file.buildSplitDiffLines()
     return file
-  }, [])
+  }, [corrected, filename, language, vulnerable])
 
   return (
     <Card className="overflow-hidden rounded-2xl border border-white/10 bg-[#0d1117] shadow-[0_18px_48px_rgba(0,0,0,.45)]">
       <div className="flex items-center justify-between border-b border-white/10 bg-[#161b22] px-5 py-3">
         <div>
-          <p className="font-mono text-xs text-white/80">contracts/TheDao.sol</p>
-          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/35">Security fix · Checks–Effects–Interactions</p>
+          <p className="font-mono text-xs text-white/80">{filename}</p>
+          <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/35">{label}</p>
         </div>
         <div className="flex gap-3 font-mono text-xs"><span className="text-red-400">−2</span><span className="text-emerald-400">+2</span></div>
       </div>
@@ -70,8 +87,13 @@ export function SolidityCodeBlock() {
           diffViewHighlight
           diffViewWrap
           diffViewFontSize={12}
+          registerHighlighter={shikiHighlighter || undefined}
         />
       </div>
     </Card>
   )
+}
+
+export function SolidityCodeBlock() {
+  return <SecurityDiff />
 }
