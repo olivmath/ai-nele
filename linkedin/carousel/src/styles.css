@@ -1,8 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
 
 /* ── IDE Code Block (Monitor Mockup) ── */
-.slide-content .code-block,
-.slide-content code {
+.slide-content .code-block {
   max-width: 100%;
   width: 100%;
   background: #1e1e2e;
@@ -550,16 +549,17 @@ body { font-family: 'Space Grotesk', Arial, sans-serif; }
 }
 
 /* ── The DAO v2 — Landing Page Identity ── */
-.slide-content:has(.td) { overflow: hidden; }
-.td { min-height: 100%; position: relative; padding: 0 0 72px; color: #ebebeb; }
-.td:before { content: ''; position: absolute; top: 0; bottom: 72px; left: -28px; width: 2px; background: linear-gradient(var(--lime) 0 12px, rgba(204,255,0,.18) 12px 100%); }
+.slide-content:has(.dao-slide) { overflow: hidden; }
+.dao-slide { min-height: 100%; position: relative; padding: 0 0 72px; color: #ebebeb; }
+.dao-slide:before { content: ''; position: absolute; top: 0; bottom: 72px; left: -28px; width: 2px; background: linear-gradient(var(--lime) 0 12px, rgba(204,255,0,.18) 12px 100%); }
+.dao-slide code { display: inline; }
 .td-class { display: flex; justify-content: space-between; padding-bottom: 18px; border-bottom: 1px solid rgba(255,255,255,.1); color: rgba(255,255,255,.4); font: 700 11px/1 'JetBrains Mono', monospace; letter-spacing: .14em; }
 .td-class b { color: #ff4d4d; }
 .td-status { color: #ff4d4d !important; }
 .td-label { margin: 48px 0 22px; color: var(--lime); font: 700 12px/1 'JetBrains Mono', monospace; letter-spacing: .2em; }
 .td--cover .td-label { margin-top: 64px; color: rgba(255,255,255,.45); }
-.td h1, .td h2 { margin: 0; color: #f0f0ea; font: 700 82px/.92 'Space Grotesk', sans-serif; letter-spacing: -.065em; }
-.td h1 em, .td h2 em { color: var(--lime); font-style: normal; }
+.dao-slide h1, .dao-slide h2 { margin: 0; color: #f0f0ea; font: 700 82px/.92 'Space Grotesk', sans-serif; letter-spacing: -.065em; }
+.dao-slide h1 em, .dao-slide h2 em { color: var(--lime); font-style: normal; }
 .td-evidence { display: flex; align-items: center; gap: 12px; margin-top: 58px; color: rgba(255,255,255,.4); font: 700 12px/1 'JetBrains Mono', monospace; letter-spacing: .12em; }
 .td-dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; background: #ff4d4d; box-shadow: 0 0 0 5px rgba(255,77,77,.12), 0 0 18px #ff4d4d; }
 .td-amount { margin: 18px 0 36px; }
@@ -843,7 +843,36 @@ body { font-family: 'Space Grotesk', Arial, sans-serif; }
   padding: 40px;
 }
 
+.dao-showcase {
+  flex: 1;
+  overflow: auto;
+}
+
+.solidity-diff-wrapper .diff-view-wrapper {
+  --diff-background-color: #0d1117;
+  --diff-gutter-background-color: #161b22;
+  --diff-code-insert-background-color: rgba(46,160,67,.18);
+  --diff-code-delete-background-color: rgba(248,81,73,.18);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+.solidity-diff-wrapper pre,
+.solidity-diff-wrapper code {
+  white-space: pre;
+  tab-size: 4;
+}
+
+.solidity-diff-wrapper .hljs-keyword,
+.solidity-diff-wrapper .hljs-type { color: #ff79c6 !important; }
+.solidity-diff-wrapper .hljs-title,
+.solidity-diff-wrapper .hljs-title.function_ { color: #8be9fd !important; }
+.solidity-diff-wrapper .hljs-string { color: #f1fa8c !important; }
+.solidity-diff-wrapper .hljs-number,
+.solidity-diff-wrapper .hljs-literal { color: #bd93f9 !important; }
+.solidity-diff-wrapper .hljs-comment { color: #6272a4 !important; font-style: italic; }
+.solidity-diff-wrapper .hljs-params,
+.solidity-diff-wrapper .hljs-variable { color: #50fa7b !important; }
+
 .viewer-scale {
   transform-origin: center center;
 }
-

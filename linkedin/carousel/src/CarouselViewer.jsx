@@ -10,7 +10,8 @@ function Trail({ index }) {
   )
 }
 
-function Slide({ html, index }) {
+function Slide({ slide, index }) {
+  const html = typeof slide === 'string' ? slide : slide.html
   return (
     <article className={`slide report-slide slide-${index + 1}`} aria-label={`Slide ${index + 1}`}>
       <Trail index={index} />
@@ -41,8 +42,8 @@ export function CarouselViewer({ carousel }) {
         <span className="report-ribbon__id">{carousel.report}</span>
       </div>
       <div className="slides" style={{ transform: `translateX(-${active * 1080}px)` }}>
-        {carousel.slides.map((html, index) => (
-          <Slide key={index} html={html} index={index} />
+        {carousel.slides.map((slide, index) => (
+          <Slide key={index} slide={slide} index={index} />
         ))}
       </div>
       <nav className="nav" aria-label="Carousel navigation">

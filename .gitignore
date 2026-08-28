@@ -31,3 +31,4 @@ video/*/capture/
 
 *storybook.log
 storybook-static
+.vercel

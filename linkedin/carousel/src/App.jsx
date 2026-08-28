@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { CarouselViewer } from './CarouselViewer'
+import SmartcontractDaoSlides from '@smartcontract-dao-slides'
 
 import theDao from '../data/the-dao.json'
 import parityWallet from '../data/parity-wallet.json'
@@ -76,10 +77,12 @@ export function App() {
         </nav>
       </aside>
 
-      <main className="viewer">
-        <div className="viewer-scale" style={{ transform: `scale(${scale})` }}>
-          <CarouselViewer carousel={carousels[selected]} key={selected} />
-        </div>
+      <main className={selected === 0 ? 'dao-showcase' : 'viewer'}>
+        {selected === 0 ? <SmartcontractDaoSlides /> : (
+          <div className="viewer-scale" style={{ transform: `scale(${scale})` }}>
+            <CarouselViewer carousel={carousels[selected]} key={selected} />
+          </div>
+        )}
       </main>
     </div>
   )

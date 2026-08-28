@@ -27,7 +27,28 @@ const manifest = {
 }
 
 await mkdir(dataDir,{recursive:true}); await mkdir(outDir,{recursive:true}); await mkdir(exportDir,{recursive:true})
-await build({entryPoints:[join(root,'src','main.jsx')],outfile:join(outDir,'app.js'),bundle:true,format:'iife',platform:'browser',jsx:'automatic',minify:true})
+const daoAdapter = join(root, 'src', 'components', 'dao-adapters.jsx')
+await build({
+  entryPoints:[join(root,'src','main.jsx')],
+  outfile:join(outDir,'app.js'),
+  bundle:true,
+  format:'iife',
+  platform:'browser',
+  jsx:'automatic',
+  minify:true,
+  loader:{ '.png':'dataurl' },
+  alias:{
+    '@smartcontract-dao-slides':join(root, 'src', 'components', 'SmartcontractDaoSlides.tsx'),
+    '@book-cover':'/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets/social-proofs/book-cover.png',
+    'lucide-react':daoAdapter,
+    '@/components/ui/badge':daoAdapter,
+    '@/components/ui/button':daoAdapter,
+    '@/components/ui/card':daoAdapter,
+    '@/components/ui/separator':daoAdapter,
+    'react':join(root, 'node_modules', 'react'),
+    'react/jsx-runtime':join(root, 'node_modules', 'react', 'jsx-runtime.js'),
+  },
+})
 for (const [key,[slug,name,report]] of Object.entries(manifest)) {
   const dataPath=join(dataDir,`${slug}.json`); const carousel=JSON.parse(await readFile(dataPath,'utf8'))
   const safe=JSON.stringify(carousel).replace(/</g,'\\u003c')
