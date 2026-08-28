@@ -21,3 +21,13 @@ ChatGPT-*.md
 
 .agents
 .claude
+node_modules/
+
+# Generated product outputs
+linkedin/carousel/dist/
+linkedin/carousel/exports/
+video/*/renders/
+video/*/capture/
+
+*storybook.log
+storybook-static
