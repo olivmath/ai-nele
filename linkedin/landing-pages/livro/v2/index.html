@@ -139,28 +139,112 @@
         .book-asset-image.is-missing { display: none; }
         .book-asset-fallback { display: none; position: absolute; inset: 0; z-index: 2; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
         .book-asset-fallback.is-visible { display: flex; }
-        .book-cover-frame { aspect-ratio: 4 / 5; border-radius: 2.5rem; box-shadow: -22px 28px 0 rgba(204,255,0,.08), 0 28px 80px rgba(0,0,0,.5); transform: perspective(1200px) rotateY(-8deg) rotateX(2deg); image-rendering: auto; backface-visibility: hidden; will-change: transform; -webkit-backface-visibility: hidden; }
+        .book-cover-frame { aspect-ratio: 4 / 5; border-radius: 2.5rem; image-rendering: auto; backface-visibility: hidden; will-change: transform; -webkit-backface-visibility: hidden; }
+
+        .book-3d-wrap {
+            perspective: 800px;
+            width: min-content;
+        }
+        .book-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            width: 260px;
+            aspect-ratio: 3 / 4;
+            animation: book-rotate 3.4s ease-in-out infinite;
+        }
+        @keyframes book-rotate {
+            0%, 100% { transform: rotateY(-30deg); }
+            50% { transform: rotateY(0deg); }
+        }
+
+        .book-3d-front {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 3px 8px 8px 3px;
+            transform: translateZ(25px);
+            box-shadow:
+                5px 5px 20px rgba(0,0,0,0.5),
+                1px 1px 3px rgba(0,0,0,0.3);
+            background: #ffffff;
+        }
+        .book-3d-front::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background:
+                linear-gradient(90deg,
+                    rgba(255,255,255,0.15) 0%,
+                    rgba(255,255,255,0) 3%,
+                    rgba(0,0,0,0) 10%,
+                    rgba(0,0,0,0.02) 50%,
+                    rgba(0,0,0,0) 100%
+                );
+            pointer-events: none;
+        }
+
+        .book-3d-spine {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            bottom: 4px;
+            width: 50px;
+            transform: translateX(234px) rotateY(90deg);
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    #f5f3ed 0px,
+                    #ece9e0 1px,
+                    #f5f3ed 2px
+                );
+            box-shadow: inset 2px 0 4px rgba(0,0,0,0.08), inset -2px 0 4px rgba(0,0,0,0.05);
+        }
+
+        .book-3d-back {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 3px 8px 8px 3px;
+            transform: translateZ(-25px);
+            box-shadow: -10px 5px 40px rgba(0,0,0,0.4);
+            background: #d4d0c8;
+        }
+
+        .book-3d-front img {
+            position: absolute;
+            inset: 10px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            object-fit: cover;
+            border-radius: 2px 4px 4px 2px;
+        }
+
+        .book-3d-content {
+            position: relative;
+            z-index: 1;
+            padding: 1.5rem;
+            color: white;
+        }
+        .book-3d-sm .book-3d {
+            width: 120px;
+        }
+        .book-3d-sm .book-3d-spine {
+            width: 24px;
+            transform: translateX(108px) rotateY(90deg);
+        }
+        .book-3d-sm .book-3d-front img {
+            inset: 5px;
+            width: calc(100% - 10px);
+            height: calc(100% - 10px);
+        }
+
         .book-spread-frame { aspect-ratio: 4 / 3; border-radius: 1.5rem; }
         .book-offer-frame { width: min(11rem, 32%); min-width: 7rem; aspect-ratio: 4 / 5; border-radius: 1.25rem; flex: none; transform: rotate(-4deg); image-rendering: auto; }
 
-        .vsl-pip {
-            position: fixed !important;
-            right: 2rem;
-            bottom: 2rem;
-            z-index: 45;
-            width: clamp(17rem, 24vw, 24rem);
-            aspect-ratio: 16 / 9 !important;
-            box-shadow: 0 24px 80px rgba(0,0,0,.6), 0 0 0 1px rgba(204,255,0,.25);
-            touch-action: none;
-            will-change: transform;
-        }
-
-        .vsl-pip .vsl-label { display: none; }
-        .vsl-pip .vsl-pip-close { display: flex; }
-        .vsl-pip .vsl-pip-drag { display: flex; }
-        .vsl-pip.is-dragging { cursor: grabbing; user-select: none; }
-
-        @media (max-width: 640px) { .vsl-pip { right: 1rem; bottom: 1rem; width: min(20rem, calc(100vw - 2rem)); } }
 
         .social-marquee { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent); }
         .social-track { display: flex; width: max-content; gap: 1rem; animation: social-scroll 90s linear infinite; }
@@ -183,6 +267,9 @@
             summary > div { min-width: 0; }
             summary h3 { font-size: 1rem !important; }
             .book-cover-frame { transform: none; box-shadow: 0 16px 60px rgba(0,0,0,.5); border-radius: 1.5rem; max-width: 16rem; margin: 0 auto; }
+            .book-3d { width: 220px; }
+            .book-3d-spine { width: 44px; transform: translateX(196px) rotateY(90deg); }
+            .book-3d-wrap { margin: 0 auto; }
             .glass.p-12 { padding: 1.5rem !important; }
             .glass.p-8 { padding: 1.25rem !important; }
             footer .text-\[9rem\] { font-size: 3rem !important; }
@@ -193,7 +280,7 @@
         }
 
         @media (prefers-reduced-motion: reduce) {
-            .float-anim, .pulse-lime, .social-track {
+            .float-anim, .pulse-lime, .social-track, .book-3d {
                 animation: none;
             }
         }
@@ -242,12 +329,15 @@
                 </div>
 
                 <div class="lg:col-span-5 relative flex justify-center lg:justify-end" data-sd-id="26">
-                    <figure data-book-mockup="hero" class="book-asset-frame book-cover-frame w-full max-w-md float-anim" aria-label="Mockup da capa do livro Smartcontract Engineer - Solidity">
-                        <img src="../assets/book-cover-mockup.png" alt="Mockup da capa do livro Smartcontract Engineer - Solidity" class="book-asset-image" onerror="this.classList.add('is-missing'); this.nextElementSibling.classList.add('is-visible')">
-                        <figcaption class="book-asset-fallback">
-                            <div><iconify-icon icon="lucide:book-copy" class="text-5xl text-[#ccff00] mb-4"></iconify-icon><p class="font-mono text-xs uppercase tracking-tech text-[#ccff00]">Mockup da capa</p><p class="text-sm text-white/50 mt-2">../assets/book-cover-mockup.png</p></div>
-                        </figcaption>
-                    </figure>
+                    <div class="book-3d-wrap float-anim" aria-label="Mockup 3D da capa do livro Smartcontract Engineer - Solidity">
+                        <div class="book-3d">
+                            <div class="book-3d-front">
+                                <img src="../assets/social-proofs/book-cover.png" alt="Capa do livro Smartcontract Engineer - Solidity">
+                            </div>
+                            <div class="book-3d-spine"></div>
+                            <div class="book-3d-back"></div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>
@@ -266,10 +356,8 @@
                         <iconify-icon icon="lucide:play"></iconify-icon>
                         VSL · REPRODUZINDO
                     </div>
-                    <button id="vsl-pip-close" type="button" class="vsl-pip-close hidden absolute top-3 right-3 z-10 w-8 h-8 rounded-full bg-black/80 text-white items-center justify-center hover:bg-[#ccff00] hover:text-black" aria-label="Fechar vídeo flutuante">✕</button>
-                    <button id="vsl-pip-drag" type="button" class="vsl-pip-drag hidden absolute top-3 left-3 z-10 h-8 px-3 rounded-full bg-black/80 text-white items-center gap-2 font-mono text-[9px] uppercase tracking-tech cursor-grab" aria-label="Arrastar vídeo flutuante"><iconify-icon icon="lucide:grip-horizontal"></iconify-icon> Arrastar</button>
                 </div>
-                <div>
+                <div class="order-first lg:order-none">
                     <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-5">Assista antes de decidir</p>
                     <h2 class="text-4xl md:text-5xl font-bold leading-tight mb-6">Entenda por que este livro começa pela <span class="text-[#ccff00]">segurança.</span></h2>
                     <p class="text-white/60 text-lg leading-relaxed">Em poucos minutos, veja a proposta da formação, a profundidade do material e para quem esta edição foi construída.</p>
@@ -439,31 +527,36 @@
                 <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-stretch">
                     <!-- Esquerda: capa + features -->
                     <div class="flex flex-col gap-8">
-                        <div class="flex items-center gap-6">
-                            <figure data-book-mockup="compact" class="book-asset-frame book-offer-frame" aria-label="Mockup compacto da capa do livro">
-                                <img src="../assets/book-cover-mockup.png" alt="Capa do livro Smartcontract Engineer - Solidity" class="book-asset-image" loading="lazy" onerror="this.classList.add('is-missing'); this.nextElementSibling.classList.add('is-visible')">
-                                <figcaption class="book-asset-fallback"><iconify-icon icon="lucide:book-copy" class="text-3xl text-[#ccff00]"></iconify-icon></figcaption>
-                            </figure>
-                            <div>
+                        <div class="flex flex-col sm:flex-row items-center gap-6">
+                            <div class="book-3d-wrap book-3d-sm flex-none" aria-label="Mockup compacto da capa do livro">
+                                <div class="book-3d">
+                                    <div class="book-3d-front">
+                                        <img src="../assets/social-proofs/book-cover.png" alt="Capa do livro Smartcontract Engineer - Solidity" loading="lazy">
+                                    </div>
+                                    <div class="book-3d-spine"></div>
+                                    <div class="book-3d-back"></div>
+                                </div>
+                            </div>
+                            <div class="text-center sm:text-left">
                                 <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-2">Smartcontract Engineer - Solidity</p>
                                 <p class="text-white/50 text-sm">Livro físico · Capa dura premium · Edição numerada</p>
                             </div>
                         </div>
                         <ul class="grid grid-cols-3 gap-2 sm:gap-3">
-                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5 text-center">
-                                <iconify-icon icon="lucide:book-open" class="block text-2xl text-[#ccff00] mb-3 mx-auto"></iconify-icon>
-                                <strong class="block text-2xl font-bold mb-1">25</strong>
-                                <span class="text-xs text-white/50">Capítulos</span>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-3 sm:p-5 text-center">
+                                <iconify-icon icon="lucide:book-open" class="block text-xl sm:text-2xl text-[#ccff00] mb-2 sm:mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-xl sm:text-2xl font-bold mb-1">25</strong>
+                                <span class="text-[10px] sm:text-xs text-white/50">Capítulos</span>
                             </li>
-                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5 text-center">
-                                <iconify-icon icon="lucide:shield-check" class="block text-2xl text-[#ccff00] mb-3 mx-auto"></iconify-icon>
-                                <strong class="block text-2xl font-bold mb-1">24</strong>
-                                <span class="text-xs text-white/50">Casos de hacking</span>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-3 sm:p-5 text-center">
+                                <iconify-icon icon="lucide:shield-check" class="block text-xl sm:text-2xl text-[#ccff00] mb-2 sm:mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-xl sm:text-2xl font-bold mb-1">24</strong>
+                                <span class="text-[10px] sm:text-xs text-white/50">Casos de hacking</span>
                             </li>
-                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-5 text-center">
-                                <iconify-icon icon="lucide:layers-3" class="block text-2xl text-[#ccff00] mb-3 mx-auto"></iconify-icon>
-                                <strong class="block text-2xl font-bold mb-1">15</strong>
-                                <span class="text-xs text-white/50">Contratos práticos</span>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-3 sm:p-5 text-center">
+                                <iconify-icon icon="lucide:layers-3" class="block text-xl sm:text-2xl text-[#ccff00] mb-2 sm:mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-xl sm:text-2xl font-bold mb-1">15</strong>
+                                <span class="text-[10px] sm:text-xs text-white/50">Contratos práticos</span>
                             </li>
                         </ul>
                     </div>
@@ -613,109 +706,6 @@
             stickyCTA.classList.toggle('opacity-0', window.scrollY <= 800);
         });
 
-        const vslPlayer = document.getElementById('vsl-player');
-        const vslPipClose = document.getElementById('vsl-pip-close');
-        const vslPipDrag = document.getElementById('vsl-pip-drag');
-        let vslPipDismissed = false;
-        let vslPipActive = false;
-        let vslPipPosition = null;
-
-        function clearVslPipStyles() {
-            vslPlayer.style.left = '';
-            vslPlayer.style.top = '';
-            vslPlayer.style.right = '';
-            vslPlayer.style.bottom = '';
-            vslPlayer.style.transform = '';
-            vslPlayer.style.transition = '';
-        }
-
-        function animateVslIntoPip() {
-            const from = vslPlayer.getBoundingClientRect();
-            vslPlayer.classList.add('vsl-pip');
-            if (vslPipPosition) {
-                vslPlayer.style.left = `${vslPipPosition.x}px`;
-                vslPlayer.style.top = `${vslPipPosition.y}px`;
-                vslPlayer.style.right = 'auto';
-                vslPlayer.style.bottom = 'auto';
-            }
-            const to = vslPlayer.getBoundingClientRect();
-            const dx = from.left - to.left;
-            const dy = from.top - to.top;
-            const sx = from.width / to.width;
-            const sy = from.height / to.height;
-            vslPlayer.style.transformOrigin = 'top left';
-            vslPlayer.style.transition = 'none';
-            vslPlayer.style.transform = `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
-            requestAnimationFrame(() => {
-                vslPlayer.style.transition = 'transform 800ms cubic-bezier(.22, .8, .2, 1), border-radius 800ms cubic-bezier(.22, .8, .2, 1), box-shadow 800ms cubic-bezier(.22, .8, .2, 1)';
-                vslPlayer.style.transform = 'translate(0, 0) scale(1, 1)';
-            });
-            vslPipActive = true;
-        }
-
-        function leaveVslPip() {
-            clearVslPipStyles();
-            vslPlayer.classList.remove('vsl-pip', 'is-dragging');
-            vslPipActive = false;
-        }
-
-        function updateVslPip() {
-            if (window.innerWidth < 768) return;
-            const vslSection = document.getElementById('vsl');
-            const sectionRect = vslSection.getBoundingClientRect();
-            if (vslPipActive) {
-                if (sectionRect.top >= -80) {
-                    vslPipDismissed = false;
-                    leaveVslPip();
-                }
-                return;
-            }
-            const playerRect = vslPlayer.getBoundingClientRect();
-            const shouldDetach = playerRect.top <= 96 && playerRect.bottom > 140;
-            if (!shouldDetach) {
-                if (sectionRect.top >= -80) vslPipDismissed = false;
-                return;
-            }
-            if (!vslPipDismissed && !vslPipActive) animateVslIntoPip();
-        }
-        window.addEventListener('scroll', updateVslPip, { passive: true });
-        vslPipClose.addEventListener('click', () => {
-            vslPipDismissed = true;
-            leaveVslPip();
-        });
-        vslPipDrag.addEventListener('pointerdown', (event) => {
-            if (!vslPipActive) return;
-            const rect = vslPlayer.getBoundingClientRect();
-            const offsetX = event.clientX - rect.left;
-            const offsetY = event.clientY - rect.top;
-            vslPlayer.style.transition = 'none';
-            vslPlayer.style.transform = 'none';
-            vslPlayer.style.left = `${rect.left}px`;
-            vslPlayer.style.top = `${rect.top}px`;
-            vslPlayer.style.right = 'auto';
-            vslPlayer.style.bottom = 'auto';
-            vslPlayer.classList.add('is-dragging');
-            vslPipDrag.setPointerCapture(event.pointerId);
-
-            const move = (pointerEvent) => {
-                const playerRect = vslPlayer.getBoundingClientRect();
-                const x = Math.max(0, Math.min(window.innerWidth - playerRect.width, pointerEvent.clientX - offsetX));
-                const y = Math.max(0, Math.min(window.innerHeight - playerRect.height, pointerEvent.clientY - offsetY));
-                vslPlayer.style.left = `${x}px`;
-                vslPlayer.style.top = `${y}px`;
-                vslPipPosition = { x, y };
-            };
-            const end = () => {
-                vslPlayer.classList.remove('is-dragging');
-                vslPipDrag.removeEventListener('pointermove', move);
-                vslPipDrag.removeEventListener('pointerup', end);
-                vslPipDrag.removeEventListener('pointercancel', end);
-            };
-            vslPipDrag.addEventListener('pointermove', move);
-            vslPipDrag.addEventListener('pointerup', end);
-            vslPipDrag.addEventListener('pointercancel', end);
-        });
-        updateVslPip();
 
         const socialProofTrack = document.getElementById('social-proof-track');
         const socialProofs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23].map((number) => {
