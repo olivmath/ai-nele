@@ -734,6 +734,104 @@
                 detail.querySelector('summary').setAttribute('aria-expanded', String(detail.open));
             });
         });
+
+        // --- Custom Event Tracking (Vercel Analytics) ---
+        function va(name, data) {
+            if (window.va) window.va('event', { name, data });
+        }
+
+        // 1. Scroll depth — fires once per threshold
+        const scrollFired = {};
+        window.addEventListener('scroll', () => {
+            const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            [25, 50, 75, 100].forEach((t) => {
+                if (pct >= t && !scrollFired[t]) {
+                    scrollFired[t] = true;
+                    va('scroll_depth', { depth: String(t) });
+                }
+            });
+        }, { passive: true });
+
+        // 2. Chapter details opened
+        document.querySelectorAll('#conteudo details').forEach((d) => {
+            d.addEventListener('toggle', () => {
+                if (d.open) {
+                    const title = d.querySelector('h3')?.textContent?.trim() || 'unknown';
+                    va('chapter_opened', { chapter: title });
+                }
+            });
+        });
+
+        // 3. Hack case modals opened
+        document.querySelectorAll('[data-hack-modal]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const label = btn.closest('article')?.querySelector('h3')?.textContent?.trim() || btn.dataset.hackModal;
+                va('hack_case_opened', { case: label });
+            });
+        });
+
+        // 4. CTA clicks
+        document.getElementById('hero-primary-cta')?.addEventListener('click', () => va('cta_click', { location: 'hero' }));
+        document.getElementById('sticky-cta-btn')?.addEventListener('click', () => va('cta_click', { location: 'sticky' }));
+        document.querySelector('#form-container a[href*="whatsapp"]')?.addEventListener('click', () => va('cta_click', { location: 'offer_whatsapp' }));
+
+        // 5. Time on page — fires at 30s, 60s, 120s, 300s
+        const timeFired = {};
+        [30, 60, 120, 300].forEach((s) => {
+            setTimeout(() => {
+                if (!document.hidden && !timeFired[s]) {
+                    timeFired[s] = true;
+                    va('time_on_page', { seconds: String(s) });
+                }
+            }, s * 1000);
+        });
+
+        // 6. Section visibility — fires once per section entering viewport
+        const sectionSeen = {};
+        const sectionObs = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting && !sectionSeen[e.target.id]) {
+                    sectionSeen[e.target.id] = true;
+                    va('section_viewed', { section: e.target.id });
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('section[id]').forEach((s) => sectionObs.observe(s));
+
+        // 7. FAQ opened
+        document.querySelectorAll('section.bg-black\\/40 details').forEach((d) => {
+            d.addEventListener('toggle', () => {
+                if (d.open) {
+                    const q = d.querySelector('h4')?.textContent?.trim() || 'unknown';
+                    va('faq_opened', { question: q });
+                }
+            });
+        });
+
+        // 8. VSL video play
+        const vslVideo = document.querySelector('#vsl-player video');
+        if (vslVideo) {
+            vslVideo.addEventListener('play', () => va('vsl_play', {}), { once: true });
+            vslVideo.addEventListener('ended', () => va('vsl_completed', {}), { once: true });
+        }
+
+        // 9. Nav link clicks
+        document.querySelectorAll('header nav a[href^="#"]').forEach((a) => {
+            a.addEventListener('click', () => va('nav_click', { target: a.getAttribute('href') }));
+        });
+
+        // 10. Footer social clicks
+        document.getElementById('footer-linkedin')?.addEventListener('click', () => va('social_click', { network: 'linkedin' }));
+        document.getElementById('footer-github')?.addEventListener('click', () => va('social_click', { network: 'github' }));
+
+        // 11. Exit intent (mouse leaves viewport top)
+        let exitFired = false;
+        document.addEventListener('mouseout', (e) => {
+            if (!exitFired && e.clientY < 5) {
+                exitFired = true;
+                va('exit_intent', {});
+            }
+        });
     </script>
 
     <!-- Vercel Analytics + Speed Insights -->
