@@ -40,6 +40,7 @@ await build({
   alias:{
     '@smartcontract-dao-slides':join(root, 'src', 'components', 'SmartcontractDaoSlides.tsx'),
     '@book-cover':'/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets/social-proofs/book-cover.png',
+    '@book-mockup':'/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets/book-cover-mockup.png',
     'lucide-react':daoAdapter,
     '@/components/ui/badge':daoAdapter,
     '@/components/ui/button':daoAdapter,

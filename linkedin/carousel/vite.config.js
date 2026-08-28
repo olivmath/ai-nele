@@ -12,6 +12,7 @@ export default defineConfig({
       '@/components/ui/separator': '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/carousel/src/components/dao-adapters.jsx',
       '@smartcontract-dao-slides': '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/carousel/src/components/SmartcontractDaoSlides.tsx',
       '@book-cover': '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets/social-proofs/book-cover.png',
+      '@book-mockup': '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets/book-cover-mockup.png',
       react: '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/carousel/node_modules/react',
       'react/jsx-runtime': '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/carousel/node_modules/react/jsx-runtime.js',
     },
@@ -20,7 +21,7 @@ export default defineConfig({
     fs: {
       allow: [
         '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/carousel',
-        '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets/social-proofs',
+        '/Users/olivmath/orca/workspaces/linkedin-api/scoter/linkedin/landing-pages/livro/assets',
       ],
     },
   },

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Card, CardContent } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import bookCover from "@book-cover"
+import bookMockup from "@book-mockup"
 import { SolidityCodeBlock } from "./SolidityCodeBlock"
 
 const slides = ["Abertura", "Linha do tempo", "Sequência", "Código", "Veredito"]
@@ -145,7 +146,7 @@ export default function SmartcontractDaoSlides() {
                 <div className="relative my-5 flex flex-1 items-center justify-center overflow-hidden rounded-2xl border border-[#ccff00]/15 bg-black/30">
                   <div className="absolute inset-0 bg-[linear-gradient(rgba(204,255,0,.05)_1px,transparent_1px),linear-gradient(90deg,rgba(204,255,0,.05)_1px,transparent_1px)] bg-[size:24px_24px]" />
                   <div className="absolute size-48 rounded-full bg-[#ccff00]/20 blur-3xl" />
-                  <img src={bookCover} alt="Capa do livro Smartcontract Engineer — Solidity" className="relative z-10 max-h-[15rem] max-w-[10rem] rounded-lg shadow-[0_24px_50px_rgba(0,0,0,.55)]" />
+                  <img src={bookMockup} alt="Mockup 3D do livro Smartcontract Engineer — Solidity" className="relative z-10 max-h-[17rem] max-w-[14rem] drop-shadow-[0_26px_24px_rgba(0,0,0,.68)]" />
                 </div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-[#ccff00]">Smartcontract Engineer · edição física</p>
                 <h3 className="mt-3 text-center text-2xl font-bold leading-[1.05] tracking-tight">Aprenda Solidity do jeito certo e não seja <span className="text-red-500">hackeado.</span></h3>
