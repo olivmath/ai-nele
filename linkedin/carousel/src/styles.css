@@ -858,8 +858,18 @@ body { font-family: 'Space Grotesk', Arial, sans-serif; }
 
 .solidity-diff-wrapper pre,
 .solidity-diff-wrapper code {
-  white-space: pre;
+  white-space: pre-wrap;
   tab-size: 4;
+}
+
+.solidity-diff-wrapper .old-diff-table-wrapper,
+.solidity-diff-wrapper .new-diff-table-wrapper { overflow-x: hidden !important; }
+.solidity-diff-wrapper .old-diff-table,
+.solidity-diff-wrapper .new-diff-table { table-layout: fixed; }
+.solidity-diff-wrapper .diff-line-content-item {
+  white-space: pre-wrap !important;
+  overflow-wrap: anywhere;
+  word-break: break-word !important;
 }
 
 .solidity-diff-wrapper .hljs-keyword,

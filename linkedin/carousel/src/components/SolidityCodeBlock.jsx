@@ -44,8 +44,8 @@ export function SolidityCodeBlock() {
   const diffFile = useMemo(() => {
     const file = generateDiffFile(
       'contracts/TheDao.sol', vulnerableContract,
-      'contracts/SecureVault.sol', correctedContract,
-      'typescript', 'typescript',
+      'contracts/TheDao.sol', correctedContract,
+      'solidity', 'solidity',
     )
     file.initTheme('dark')
     file.init()
@@ -57,7 +57,7 @@ export function SolidityCodeBlock() {
     <Card className="overflow-hidden rounded-2xl border border-white/10 bg-[#0d1117] shadow-[0_18px_48px_rgba(0,0,0,.45)]">
       <div className="flex items-center justify-between border-b border-white/10 bg-[#161b22] px-5 py-3">
         <div>
-          <p className="font-mono text-xs text-white/80">contracts/Vault.sol</p>
+          <p className="font-mono text-xs text-white/80">contracts/TheDao.sol</p>
           <p className="mt-1 font-mono text-[10px] uppercase tracking-widest text-white/35">Security fix · Checks–Effects–Interactions</p>
         </div>
         <div className="flex gap-3 font-mono text-xs"><span className="text-red-400">−2</span><span className="text-emerald-400">+2</span></div>
@@ -68,8 +68,8 @@ export function SolidityCodeBlock() {
           diffViewMode={DiffModeEnum.Split}
           diffViewTheme="dark"
           diffViewHighlight
-          diffViewWrap={false}
-          diffViewFontSize={13}
+          diffViewWrap
+          diffViewFontSize={12}
         />
       </div>
     </Card>
