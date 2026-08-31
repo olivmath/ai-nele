@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 197M",
+    "valueToday": "100% devolvido após negociação",
+    "coin": "ETH + tokens",
+    "coinAmount": "~US$ 197M em tokens",
+    "attackType": "FLASH LOAN + DONATE",
+    "lines": 1,
+    "title": "Como uma função donateToReserves passou por 6 auditorias e permitiu roubar US$ 197M.",
+    "headline": "Auditado por 10 firmas de segurança — nenhuma encontrou a vulnerabilidade no contrato inteligente. O atacante devolveu tudo após negociação."
+  },
+  "slide2": {
+    "contextTitle": "6 auditorias, zero proteção contra o ataque real.",
+    "contextSub": "Euler Finance era um dos protocolos de lending mais sofisticados do DeFi. Nenhuma auditoria pegou o bug.",
+    "cards": [
+      { "tag": "PROTOCOLO", "title": "Lending avançado", "body": "Euler Finance era um dos protocolos de lending mais sofisticados do DeFi, com 6 auditorias de firmas renomadas." },
+      { "tag": "FUNÇÃO", "title": "donateToReserves()", "body": "Permitia \"doar\" tokens para as reservas do protocolo. O problema: não verificava se o doador ficava insolvente após a doação." },
+      { "tag": "13 MAR 2023", "title": "O ataque", "body": "O atacante usa flash loan + donateToReserves para manipular a proporção de colateral e drena US$ 197M.", "danger": true },
+      { "tag": "DEVOLUÇÃO", "title": "100% recuperado", "body": "Após negociação, o atacante devolve todos os fundos. O protocolo ofereceu bounty e não processou judicialmente." }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como uma \"doação\" manipulou o colateral do protocolo.",
+    "attack": [
+      "O atacante faz flash loan para obter capital massivo temporário.",
+      "Deposita tokens no Euler e recebe eTokens como colateral.",
+      "Chama donateToReserves() para \"doar\" parte dos eTokens — ficando tecnicamente insolvente.",
+      "A insolvência artificial permite liquidação com desconto que beneficia o atacante.",
+      "O atacante repete o ciclo e drena US$ 197M antes de devolver o flash loan."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "O health check que deveria vir antes da doação.",
+    "vulnerable": "function donateToReserves(uint amount) external {\n  reserves += amount;\n  healthCheck(msg.sender);\n}",
+    "corrected": "function donateToReserves(uint amount) external {\n  if(!healthCheck(msg.sender)) {\n    revert(\"unhealthy account\");\n  }\n  reserves += amount;\n  enforceLiquidationCooldown();\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Health check antes de operações",
+      "Qualquer operação que altera colateral deve verificar solvência primeiro.",
+      "Auditoria não é garantia",
+      "6 auditorias não encontraram o bug — diversifique as abordagens de segurança.",
+      "Simule cenários de insolvência",
+      "Teste o que acontece quando um usuário fica insolvente artificialmente.",
+      "Limite funções de doação",
+      "Funções que alteram reserves sem contrapartida são superfícies de ataque."
+    ]
+  }
+}

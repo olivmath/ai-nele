@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 900M+",
+    "valueToday": "Market cap destruído",
+    "coin": "BEC",
+    "coinAmount": "115 quatrilhões BEC",
+    "attackType": "INTEGER OVERFLOW",
+    "lines": 1,
+    "title": "Como uma multiplicação sem SafeMath criou tokens infinitos e destruiu US$ 900M.",
+    "headline": "Uma operação aritmética sem proteção no contrato inteligente gerou tokens do nada e colapsou o market cap de US$ 2,3 bilhões."
+  },
+  "slide2": {
+    "contextTitle": "Um token de US$ 2,3 bi destruído por uma operação aritmética.",
+    "contextSub": "BeautyChain era um token ERC-20 listado em grandes exchanges. O bug estava na função batchTransfer.",
+    "cards": [
+      { "tag": "TOKEN", "title": "BEC na OKEx", "body": "BeautyChain (BEC) era um token ERC-20 listado na OKEx com market cap acima de US$ 2,3 bilhões." },
+      { "tag": "FUNÇÃO", "title": "batchTransfer", "body": "A função permitia enviar tokens para várias pessoas em uma transação — economizando gas. Ideia boa, implementação fatal." },
+      { "tag": "22 ABR 2018", "title": "O overflow", "body": "O atacante passou um value enorme que, multiplicado por 2 endereços, deu overflow e zerou o total. Resultado: tokens infinitos.", "danger": true },
+      { "tag": "IMPACTO", "title": "Market cap zero", "body": "Exchanges pausaram o BEC. O preço colapsou de US$ 0,32 para zero. US$ 2,3 bi em market cap evaporaram.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como um overflow transformou zero em infinito.",
+    "attack": [
+      "O atacante chama batchTransfer() com 2 endereços e um value enorme.",
+      "A multiplicação value × 2 causa integer overflow e resulta em zero.",
+      "O require(balance >= total) passa porque total é zero.",
+      "O contrato subtrai zero do atacante e soma value para cada destinatário.",
+      "Tokens são criados do nada — 115 quatrilhões de BEC aparecem."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A multiplicação sem SafeMath que criou tokens do nada.",
+    "vulnerable": "function batchTransfer(address[] to, uint value) public {\n  uint total = value * to.length;\n  balances[msg.sender] -= total;\n  for(uint i = 0; i < to.length; i++) {\n    balances[to[i]] += value;\n  }\n}",
+    "corrected": "function batchTransfer(address[] to, uint value) external {\n  uint total = value * to.length;\n  if(total / to.length != value) {\n    revert(\"overflow\");\n  }\n  if(balances[msg.sender] < total) {\n    revert(\"balance\");\n  }\n  balances[msg.sender] -= total;\n  for(uint i = 0; i < to.length; i++) {\n    balances[to[i]] += value;\n  }\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Use SafeMath ou Solidity ≥0.8",
+      "Overflow silencioso em versões antigas é uma bomba-relógio.",
+      "Valide inputs de array",
+      "Funções que multiplicam por length precisam de bounds checking.",
+      "Audite funções batch",
+      "batchTransfer e similares amplificam qualquer bug aritmético.",
+      "Monitore mint anômalo",
+      "Alertas para volumes impossíveis teriam detectado o overflow."
+    ]
+  }
+}

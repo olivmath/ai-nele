@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 280M",
+    "valueToday": "US$ 280M na época",
+    "coin": "ETH",
+    "coinAmount": "513.774 ETH",
+    "attackType": "SELFDESTRUCT",
+    "lines": 1,
+    "title": "Como perder US$ 280M com uma única linha de código.",
+    "headline": "Uma vulnerabilidade no contrato inteligente da library permitiu que um usuário executasse selfdestruct e congelasse 513.774 ETH para sempre."
+  },
+  "slide2": {
+    "contextTitle": "A wallet mais popular do boom de ICOs tinha um único ponto de falha.",
+    "contextSub": "Parity Technologies, empresa de Gavin Wood, criou a multisig que guardava o ETH de centenas de projetos.",
+    "cards": [
+      { "tag": "2017", "title": "Boom de ICOs", "body": "Centenas de projetos usam a Parity Wallet para guardar ETH arrecadado. Arquitetura proxy + delegatecall: uma library, centenas de wallets." },
+      { "tag": "JUL 2017", "title": "Primeiro hack", "body": "O primeiro bug na mesma wallet já custou 153.000 ETH (~US$30M). A Parity corrige — mas o redeploy da library não é inicializado.", "danger": true },
+      { "tag": "6 NOV 2017", "title": "O kill()", "body": "devops199 chama initWallet() na library exposta, vira owner e executa kill(). O selfdestruct apaga o bytecode.", "danger": true },
+      { "tag": "DEPOIS", "title": "EIP-999 rejeitada", "body": "A comunidade propõe recuperar os fundos via hard fork. Proposta rejeitada — o Ethereum não faria outro fork." }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como uma library não-inicializada virou ponto de destruição.",
+    "attack": [
+      "A library é deployada como contrato comum — sem inicialização.",
+      "devops199 chama initWallet() na library exposta e vira owner.",
+      "Como owner, executa kill() que dispara selfdestruct.",
+      "O bytecode da library é apagado permanentemente da blockchain.",
+      "Todas as wallets que dependiam via delegatecall quebram — US$280M congelados."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A falta de um `if` que destruiu US$280M.",
+    "vulnerable": "function initWallet(address[] memory owners) public {\n  m_owners = owners;\n}\nfunction kill(address payable to) external onlyOwner {\n  selfdestruct(to);\n}",
+    "corrected": "function initWallet(address[] memory owners) external initializer {\n  if(m_owners.length != 0) {\n    revert(\"already initialized\");\n  }\n  m_owners = owners;\n}\n// implementation cannot selfdestruct"
+  },
+  "slide5": {
+    "lessons": [
+      "Inicialize uma única vez",
+      "Proteja initWallet() com initializer e um owner definido no deploy.",
+      "Evite selfdestruct em lógica compartilhada",
+      "Libraries que guardam estado não podem ser destruídas.",
+      "Isole privilégios",
+      "O contrato de implementação não deve aceitar chamadas admin diretas.",
+      "Teste a inicialização",
+      "Verifique que uma segunda chamada de init falha antes de publicar."
+    ]
+  }
+}

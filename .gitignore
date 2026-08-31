@@ -5,30 +5,42 @@ __pycache__/
 .ruff_cache/
 .pytest_cache/
 dist/
+dist-landing/
 *.egg-info/
 .venv/
 token.json
 
-# Data & outputs
-*.json
-!pyproject.toml
-!content/*.json
+# Binary assets
 *.pdf
-*.png
 *.xlsx
+*.png
+*.jpeg
+*.jpg
+*.mp4
+*.wav
 ChatGPT-*.md
 
+# Allow JSON data files
+!src/data/**/*.json
+!landing-pages/**/firebase.json
+!landing-pages/**/.firebaserc
+!package.json
+!vite.config.js
 
 .agents
 .claude
 node_modules/
+package-lock.json
 
-# Generated product outputs
-linkedin/carousel/dist/
-linkedin/carousel/exports/
-video/*/renders/
-video/*/capture/
+# Separate projects (not part of the unified frontend)
+linkedin/
+video/
+docs/
+
+# Generated
+scripts/carousel/
 
 *storybook.log
 storybook-static
 .vercel
+.firebase

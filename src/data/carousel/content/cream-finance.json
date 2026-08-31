@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 130M",
+    "valueToday": "~US$ 195M no total (3 ataques)",
+    "coin": "ETH + tokens",
+    "coinAmount": "~US$ 130M em tokens",
+    "attackType": "FLASH LOAN + ORACLE",
+    "lines": 1,
+    "title": "Como o mesmo protocolo foi hackeado 3 vezes no mesmo ano — US$ 130M no último ataque.",
+    "headline": "Terceiro ataque ao Cream Finance em 2021 — flash loan + manipulação de oráculo no contrato inteligente. A mesma causa raiz, três vezes."
+  },
+  "slide2": {
+    "contextTitle": "Três ataques, uma causa raiz, US$ 186M perdidos.",
+    "contextSub": "Cream Finance era um fork do Compound que foi hackeado 3 vezes no mesmo ano pela mesma vulnerabilidade.",
+    "cards": [
+      { "tag": "PROTOCOLO", "title": "Fork do Compound", "body": "Cream Finance era um protocolo de lending DeFi — fork do Compound com suporte a mais tokens como colateral." },
+      { "tag": "FEV 2021", "title": "Ataque #1: US$ 37M", "body": "Primeiro flash loan attack explora manipulação de preço do token AMP. Cream não corrige a causa raiz." },
+      { "tag": "AGO 2021", "title": "Ataque #2: US$ 29M", "body": "Segundo ataque com técnica similar. O protocolo perde mais US$ 29M. Mesma vulnerabilidade de oráculo." },
+      { "tag": "27 OUT 2021", "title": "Ataque #3: US$ 130M", "body": "O atacante infla artificialmente o preço do crYUSD via flash loan e drena US$ 130M. Golpe final.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como o preço de um token colateral foi inflado até o colapso.",
+    "attack": [
+      "O atacante faz flash loan massivo para obter capital temporário.",
+      "Deposita tokens e recebe crYUSD como colateral no Cream.",
+      "Manipula o preço do crYUSD inflando artificialmente seu valor.",
+      "O oráculo do Cream lê o preço manipulado e permite empréstimo maior que o real.",
+      "O atacante retira US$ 130M em tokens e devolve o flash loan."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "O oráculo de preço que confiava em dados manipuláveis.",
+    "vulnerable": "function borrow(uint amount) external {\n  uint collateral = oracle.getPrice(asset);\n  if(collateral < amount) {\n    revert(\"undercollateralized\");\n  }\n}",
+    "corrected": "function borrow(uint amount) external {\n  uint collateral = twapOracle.getPrice(asset);\n  if(!twapOracle.isValid(asset)) {\n    revert(\"unsafe price\");\n  }\n  if(collateral < amount) {\n    revert(\"undercollateralized\");\n  }\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Use oráculos TWAP resistentes",
+      "Preços spot são manipuláveis via flash loan — sempre.",
+      "Limite colaterais aceitos",
+      "Cada novo token é uma superfície de ataque adicional.",
+      "Corrija a causa raiz",
+      "Três ataques pela mesma vulnerabilidade = falha de processo.",
+      "Monitore empréstimos anômalos",
+      "Limites por transação e por bloco reduzem a janela de ataque."
+    ]
+  }
+}

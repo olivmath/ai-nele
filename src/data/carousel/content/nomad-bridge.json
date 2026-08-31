@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 190M",
+    "valueToday": "US$ 190M na época",
+    "coin": "ETH + tokens",
+    "coinAmount": "~US$ 190M multi-token",
+    "attackType": "ZERO-HASH BYPASS",
+    "lines": 1,
+    "title": "Como um upgrade de rotina abriu a porta para centenas de atacantes roubarem US$ 190M.",
+    "headline": "O primeiro hack \"democrático\" — um upgrade inicializou o root como 0x00 e centenas de pessoas copiaram o exploit do contrato inteligente."
+  },
+  "slide2": {
+    "contextTitle": "O hack que qualquer pessoa podia copiar.",
+    "contextSub": "Nomad era uma bridge cross-chain. Um upgrade de rotina transformou qualquer mensagem em válida.",
+    "cards": [
+      { "tag": "BRIDGE", "title": "Optimistic verification", "body": "Nomad usava verificação otimista — mensagens aceitas após período sem disputa. Modelo diferente das bridges tradicionais." },
+      { "tag": "UPGRADE", "title": "Root inicializado com 0x00", "body": "Um upgrade de rotina setou o trusted root como 0x00. Em Solidity, mapping retorna 0 para chaves não-existentes." },
+      { "tag": "1 AGO 2022", "title": "O exploit", "body": "O primeiro atacante descobre que qualquer root passa a verificação. Drena os primeiros fundos.", "danger": true },
+      { "tag": "EFEITO CASCATA", "title": "Centenas copiam", "body": "Qualquer pessoa podia copiar a transação, trocar o endereço e drenar mais. Centenas fizeram isso.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como um zero-hash tornou qualquer mensagem válida.",
+    "attack": [
+      "O upgrade de rotina inicializa o trusted root como bytes32(0).",
+      "O mapping do contrato retorna 0 para qualquer chave não-existente — incluindo roots falsos.",
+      "Qualquer mensagem com root 0x00 passa a verificação automaticamente.",
+      "O primeiro atacante descobre e drena os primeiros fundos.",
+      "Centenas de pessoas copiam a transação original e drenam o restante — US$ 190M no total."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A verificação de root que aceitava zero como válido.",
+    "vulnerable": "function process(bytes32 root, bytes calldata msg) external {\n  if(!acceptableRoot(root)) {\n    revert(\"bad root\");\n  }\n  execute(msg);\n}",
+    "corrected": "function process(bytes32 root, bytes calldata msg) external {\n  if(root == bytes32(0)) {\n    revert(\"zero root\");\n  }\n  if(!confirmedRoots[root]) {\n    revert(\"unconfirmed\");\n  }\n  execute(msg);\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Nunca aceite zero como válido",
+      "bytes32(0) como root é um bypass automático em mappings.",
+      "Teste upgrades com invariantes",
+      "Cada upgrade deve rodar testes que verificam as propriedades de segurança.",
+      "Valide inputs em cada camada",
+      "Defense in depth: mesmo que o caller confie, o contrato deve validar.",
+      "Limite dano por transação",
+      "Rate limiting e caps teriam reduzido o impacto do exploit."
+    ]
+  }
+}

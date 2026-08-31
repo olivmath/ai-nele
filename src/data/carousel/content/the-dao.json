@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 60M",
+    "valueToday": "~US$ 11 bi hoje",
+    "coin": "ETH",
+    "coinAmount": "3,6M ETH",
+    "attackType": "REENTRÂNCIA",
+    "lines": 2,
+    "title": "Como perder US$ 60M em ETH por causa de duas linhas na ordem errada.",
+    "headline": "Uma vulnerabilidade de reentrância no contrato inteligente drenou 3,6 milhões de ETH — um roubo que hoje vale ~US$ 11 bilhões."
+  },
+  "slide2": {
+    "contextTitle": "Da maior captação da história à maior crise de confiança do Ethereum.",
+    "contextSub": "The DAO era um fundo de investimento sem gestor. A ideia era boa. O código que a sustentava, não.",
+    "cards": [
+      { "tag": "ABR 2016", "title": "A captação recorde", "body": "The DAO capta US$ 150M em ETH de 11 mil participantes — o maior crowdfunding registrado até então." },
+      { "tag": "MAI 2016", "title": "O alerta ignorado", "body": "Pesquisadores alertam sobre reentrância na função de saque. A comunidade discute, mas o fundo já está em produção." },
+      { "tag": "17 JUN 2016", "title": "O ataque", "body": "Um contrato malicioso chama splitDAO() recursivamente e saca o mesmo saldo antes que o registro seja zerado.", "danger": true },
+      { "tag": "20 JUL 2016", "title": "O hard fork", "body": "A rede reverte o ataque por hard fork. A decisão cria uma cisão permanente: Ethereum e Ethereum Classic.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como quatro chamadas viraram um saque infinito.",
+    "attack": [
+      "O atacante deposita ETH e ganha direito legítimo de saque.",
+      "A chamada splitDAO() envia ETH antes de atualizar o saldo.",
+      "A fallback function do atacante reentra enquanto o saldo antigo continua válido.",
+      "O contrato autoriza outro saque do mesmo saldo.",
+      "O loop repete até drenar os fundos disponíveis."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A vulnerabilidade cabia na inversão de duas linhas.",
+    "vulnerable": "function withdraw(uint amount) external {\n  msg.sender.call{value: amount}(\"\");\n  balances[msg.sender] -= amount;\n}",
+    "corrected": "function withdraw(uint amount) external nonReentrant {\n  balances[msg.sender] -= amount;\n  msg.sender.call{value: amount}(\"\");\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "CEI: Checks → Effects → Interactions",
+      "Valide a condição, atualize o saldo e só então faça a chamada externa.",
+      "ReentrancyGuard fecha a porta",
+      "Proteja funções de saque com nonReentrant quando transferem valor.",
+      "call transfere controle",
+      "Toda chamada externa pode executar código arbitrário — fronteira de confiança.",
+      "Teste com contrato atacante",
+      "Simule fallback e reentrada no teste antes do deploy."
+    ]
+  }
+}

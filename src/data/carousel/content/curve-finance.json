@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "~US$ 62M",
+    "valueToday": "~US$ 62M na época",
+    "coin": "CRV + ETH",
+    "coinAmount": "~US$ 62M em pools",
+    "attackType": "COMPILER BUG",
+    "lines": 0,
+    "title": "Como um bug no compilador Vyper roubou ~US$ 62M — mesmo com o código correto.",
+    "headline": "O código-fonte tinha o reentrancy guard certo. Mas o compilador gerou bytecode sem a proteção — uma vulnerabilidade invisível no contrato inteligente."
+  },
+  "slide2": {
+    "contextTitle": "O código estava certo. O bytecode, não.",
+    "contextSub": "Curve Finance é um dos maiores DEXs do DeFi. O bug não estava no código — estava no compilador Vyper.",
+    "cards": [
+      { "tag": "DEX", "title": "Curve Finance", "body": "Um dos maiores DEXs do ecossistema DeFi, escrito em Vyper — alternativa ao Solidity para a EVM." },
+      { "tag": "PROTEÇÃO", "title": "@nonreentrant correto", "body": "Os devs usaram o decorator @nonreentrant(\"lock\") — a forma correta de proteger contra reentrância em Vyper." },
+      { "tag": "COMPILADOR", "title": "Bug no Vyper 0.2.15-0.3.0", "body": "Versões do compilador Vyper geravam bytecode sem o guard de reentrância. O código-fonte estava certo, o binário não.", "danger": true },
+      { "tag": "30 JUL 2023", "title": "Pools drenados", "body": "Atacantes exploram a reentrância fantasma e drenam ~US$ 62M de múltiplos pools do Curve.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como um compilador bugado removeu a proteção do código.",
+    "attack": [
+      "Os desenvolvedores escrevem @nonreentrant(\"lock\") no código Vyper — proteção correta.",
+      "O compilador Vyper 0.2.15-0.3.0 tem um bug que omite o guard no bytecode final.",
+      "O contrato é deployado com código-fonte seguro mas bytecode vulnerável.",
+      "Atacantes descobrem que a reentrância funciona apesar do guard visível no fonte.",
+      "Múltiplos pools do Curve são drenados via reentrância clássica — ~US$ 70M perdidos."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "O guard que existia no código mas não no bytecode.",
+    "vulnerable": "@nonreentrant('lock')\ndef remove_liquidity(_amount: uint256):\n    send(msg.sender, _amount)",
+    "corrected": "# Vyper 0.3.10, compiler pinned\n@nonreentrant('lock')\ndef remove_liquidity(_amount: uint256):\n    assert self.lock == 1\n    send(msg.sender, _amount)"
+  },
+  "slide5": {
+    "lessons": [
+      "Congele o compilador",
+      "Declare e audite a versão exata que gera o bytecode implantado.",
+      "Teste o bytecode",
+      "Uma proteção no fonte só existe se estiver presente no artefato compilado.",
+      "Defesa em profundidade",
+      "Limites de retirada e pausas reduzem impacto quando um guard falha.",
+      "Audite a toolchain",
+      "Compilador e dependências entram no seu modelo de ameaça."
+    ]
+  }
+}

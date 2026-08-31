@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 611M",
+    "valueToday": "100% devolvido",
+    "coin": "ETH + BSC + MATIC",
+    "coinAmount": "US$ 611M multi-chain",
+    "attackType": "CROSS-CHAIN",
+    "lines": 1,
+    "title": "Como uma vulnerabilidade cross-chain permitiu o roubo de US$ 611M em cripto.",
+    "headline": "O maior roubo de DeFi até então — o atacante explorou uma falha no contrato inteligente da bridge, roubou US$ 611M e devolveu tudo."
+  },
+  "slide2": {
+    "contextTitle": "O maior roubo de DeFi — com final inesperado.",
+    "contextSub": "Poly Network conectava Ethereum, BSC e Polygon. O atacante encontrou um atalho para trocar o administrador.",
+    "cards": [
+      { "tag": "BRIDGE", "title": "Cross-chain DeFi", "body": "Poly Network era uma bridge que conectava 3 blockchains, permitindo transferir ativos entre Ethereum, BSC e Polygon." },
+      { "tag": "FALHA", "title": "Keeper swap", "body": "O atacante craftou uma mensagem cross-chain que chamava a função interna de troca de keeper — assumindo controle total." },
+      { "tag": "10 AGO 2021", "title": "O roubo", "body": "US$ 611M drenados de 3 chains simultaneamente. O maior hack de DeFi registrado até então.", "danger": true },
+      { "tag": "REVIRAVOLTA", "title": "Devolução total", "body": "O atacante devolveu todos os fundos e recebeu oferta de emprego. Chamou o ataque de \"apenas por diversão\"." }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como uma mensagem cross-chain trocou o administrador.",
+    "attack": [
+      "O atacante identifica que a bridge aceita mensagens cross-chain arbitrárias.",
+      "Crafta uma mensagem que chama a função interna de troca de keeper.",
+      "A bridge executa a mensagem sem validar o emissor — o atacante vira admin.",
+      "Como admin, autoriza retiradas massivas em Ethereum, BSC e Polygon.",
+      "US$ 611M são transferidos para endereços do atacante em 3 chains."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A validação de emissor que faltava na bridge.",
+    "vulnerable": "function verifyHeader(bytes calldata proof) external {\n  if(!verify(proof)) {\n    revert(\"invalid\");\n  }\n  executeCrossChainTx();\n}",
+    "corrected": "function verifyHeader(bytes calldata proof) external {\n  if(!verify(proof)) {\n    revert(\"invalid proof\");\n  }\n  if(!trustedEmitter[msg.sender]) {\n    revert(\"untrusted chain\");\n  }\n  executeCrossChainTx();\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Valide o emissor cross-chain",
+      "Nunca execute mensagens sem verificar a origem confiável.",
+      "Separe funções admin de funções públicas",
+      "Troca de keeper não pode ser acessível via mensagem externa.",
+      "Limite privilégios cross-chain",
+      "Bridges devem ter o menor privilégio possível em cada chain.",
+      "Audite o fluxo de mensagens",
+      "Trace completo de como uma mensagem vira execução no destino."
+    ]
+  }
+}

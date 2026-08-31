@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 625M",
+    "valueToday": "US$ 625M na época",
+    "coin": "ETH + USDC",
+    "coinAmount": "173.600 ETH + 25,5M USDC",
+    "attackType": "KEY COMPROMISE",
+    "lines": 0,
+    "title": "Como um PDF malicioso custou US$ 625M em ETH e USDC.",
+    "headline": "O maior hack de DeFi — grupo Lazarus comprometeu chaves de validadores da bridge do Axie Infinity via engenharia social."
+  },
+  "slide2": {
+    "contextTitle": "Um ataque de phishing que custou US$ 625M.",
+    "contextSub": "Ronin era a sidechain do Axie Infinity. Um PDF de oferta de emprego falsa abriu a porta para o grupo Lazarus.",
+    "cards": [
+      { "tag": "AXIE", "title": "Play-to-earn bilionário", "body": "Axie Infinity era o maior jogo play-to-earn do mundo com bilhões em TVL. A bridge Ronin usava multisig 5/9 para retiradas." },
+      { "tag": "PHISHING", "title": "Oferta de emprego falsa", "body": "Grupo Lazarus (APT norte-coreano) envia PDF malicioso como oferta de emprego para engenheiro da Sky Mavis." },
+      { "tag": "ACESSO", "title": "5 de 9 chaves", "body": "O atacante compromete 4 chaves da Sky Mavis + 1 chave temporária da Axie DAO que nunca foi revogada.", "danger": true },
+      { "tag": "23 MAR 2022", "title": "O roubo", "body": "173.600 ETH + 25,5M USDC drenados. O hack só foi descoberto 6 dias depois quando um usuário tentou sacar.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como engenharia social comprometeu um multisig 5/9.",
+    "attack": [
+      "Grupo Lazarus envia PDF com malware como oferta de emprego para engenheiro da Sky Mavis.",
+      "O malware compromete os sistemas internos e obtém acesso a 4 chaves de validadores.",
+      "Uma 5ª chave pertencia à Axie DAO — permissão temporária que nunca foi revogada.",
+      "Com 5/9 chaves, o atacante atinge o quorum e autoriza retiradas massivas.",
+      "US$ 625M drenados — o hack só é descoberto 6 dias depois."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A validação de quorum que confiava em chaves comprometidas.",
+    "vulnerable": "function withdraw(bytes[] calldata sigs) external {\n  if(sigs.length < 5) {\n    revert(\"quorum\");\n  }\n  release();\n}",
+    "corrected": "function withdraw(bytes[] calldata sigs) external {\n  if(uniqueTrustedSigners(sigs) < 5) {\n    revert(\"quorum not met\");\n  }\n  if(!withdrawalLimitNotExceeded()) {\n    revert(\"limit exceeded\");\n  }\n  release();\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Separe as chaves de validação",
+      "Nenhuma organização deve concentrar o quorum de uma bridge.",
+      "Revogue permissões temporárias",
+      "Acesso excepcional precisa expirar automaticamente.",
+      "Monitore retiradas anômalas",
+      "Limites, alertas e pausas reduzem a janela de roubo.",
+      "Segurança operacional é código",
+      "Proteja endpoints, pessoas e chaves com o mesmo rigor do contrato."
+    ]
+  }
+}

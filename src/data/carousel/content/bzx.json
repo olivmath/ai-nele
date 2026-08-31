@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "~US$ 1M",
+    "valueToday": "~US$ 954K na época",
+    "coin": "ETH",
+    "coinAmount": "~3.500 ETH",
+    "attackType": "FLASH LOAN",
+    "lines": 1,
+    "title": "Como o primeiro flash loan attack da história roubou ~US$ 1M em ETH.",
+    "headline": "Dois ataques em 4 dias exploraram oráculos on-chain manipuláveis — o nascimento de uma nova categoria de hack em contratos inteligentes."
+  },
+  "slide2": {
+    "contextTitle": "O ataque que inaugurou a era dos flash loans.",
+    "contextSub": "bZx era um protocolo de margin trading que confiava em oráculos de preço on-chain manipuláveis.",
+    "cards": [
+      { "tag": "PROTOCOLO", "title": "Margin trading DeFi", "body": "bZx permitia operações alavancadas on-chain. Usava oráculos de preço do Kyber e Uniswap para calcular colateral." },
+      { "tag": "FERRAMENTA", "title": "Flash loans", "body": "Flash loans permitem emprestar qualquer valor sem colateral — desde que devolvido na mesma transação. Capital infinito temporário." },
+      { "tag": "15 FEV 2020", "title": "Ataque #1: ~US$ 350K", "body": "O atacante faz flash loan de 10.000 ETH, manipula o preço no Uniswap e lucra com a posição alavancada no bZx.", "danger": true },
+      { "tag": "18 FEV 2020", "title": "Ataque #2: ~US$ 600K", "body": "Quatro dias depois, outro ataque com técnica similar. O protocolo perde mais US$ 600K. Mesma causa raiz.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como capital infinito temporário quebrou um oráculo.",
+    "attack": [
+      "O atacante faz flash loan de 10.000 ETH no dYdX.",
+      "Usa parte do ETH como colateral para abrir posição short no bZx.",
+      "Com o restante, compra ETH massivamente no Uniswap — inflando o preço.",
+      "O oráculo on-chain do bZx lê o preço manipulado e liquida a posição errada.",
+      "O atacante lucra com a diferença e devolve o flash loan na mesma transação."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "O oráculo spot que deveria ser um TWAP.",
+    "vulnerable": "function borrow(uint amount) external {\n  uint price = spotOracle.getPrice();\n  _borrow(amount, price);\n}",
+    "corrected": "function borrow(uint amount) external {\n  uint price = twapOracle.getPrice();\n  if(twapOracle.isStale()) {\n    revert(\"stale price\");\n  }\n  _borrow(amount, price);\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Use oráculos TWAP",
+      "Oráculos spot on-chain são manipuláveis por qualquer flash loan.",
+      "Limite operações por bloco",
+      "Cooldowns entre ações críticas reduzem o poder do capital temporário.",
+      "Simule flash loans no teste",
+      "Se o protocolo interage com DEX, teste manipulação de preço.",
+      "Defesa em profundidade",
+      "Circuit breakers e limites de exposição reduzem o impacto."
+    ]
+  }
+}

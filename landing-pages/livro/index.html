@@ -1,0 +1,841 @@
+<!DOCTYPE html><html lang="pt-BR" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smartcontract Engineer - Solidity | Segurança desde o primeiro contrato</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&amp;family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --obsidian: #0a0a0a;
+            --surface: #0c0c0c;
+            --lime: #ccff00;
+            --emerald: #10b981;
+            --text-primary: #ebebeb;
+        }
+
+        body {
+            background-color: #000000;
+            color: var(--text-primary);
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        .glass {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .grid-pattern {
+            background-image: linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px), 
+                              linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 60px 60px;
+        }
+
+        .noise-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 50;
+            pointer-events: none;
+            opacity: 0.05;
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3%3Ffilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E");
+        }
+
+        .float-anim {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .pulse-lime {
+            animation: pulse-lime 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        @keyframes pulse-lime {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: .5; transform: scale(1.2); }
+        }
+
+        .lime-shadow {
+            box-shadow: 0 0 30px rgba(204, 255, 0, 0.3);
+        }
+
+        details[open] summary iconify-icon {
+            transform: rotate(180deg);
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tracking-tech {
+            letter-spacing: 0.2em;
+        }
+
+        .hero-title {
+            font-size: clamp(3.25rem, 6vw, 6rem);
+            line-height: 0.9;
+            letter-spacing: -0.06em;
+        }
+
+        .incident-card {
+            background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02));
+            border: 1px solid rgba(255,255,255,.14);
+            box-shadow: inset 3px 0 0 var(--lime);
+        }
+
+        .incident-card::before {
+            content: '';
+            display: block;
+            height: 1px;
+            background: repeating-linear-gradient(90deg, rgba(255,255,255,.45) 0 3px, transparent 3px 8px);
+            margin-bottom: 1rem;
+        }
+
+        dialog.hack-modal {
+            width: min(52rem, calc(100% - 2rem));
+            max-height: min(48rem, calc(100% - 2rem));
+            color: var(--text-primary);
+            background: #101010;
+            border: 1px solid rgba(204,255,0,.35);
+            border-radius: 2rem;
+            padding: 0;
+        }
+
+        dialog.hack-modal::backdrop { background: rgba(0,0,0,.82); backdrop-filter: blur(8px); }
+        .hack-modal pre { white-space: pre-wrap; background: #060606; border: 1px solid rgba(255,255,255,.1); }
+
+        .book-asset-frame {
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(145deg, rgba(204,255,0,.12), rgba(255,255,255,.03));
+            border: 1px solid rgba(255,255,255,.14);
+        }
+
+        .book-asset-frame::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(135deg, transparent 35%, rgba(204,255,0,.08));
+        }
+
+        .book-asset-image { position: relative; z-index: 1; width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+        .book-asset-image.is-missing { display: none; }
+        .book-asset-fallback { display: none; position: absolute; inset: 0; z-index: 2; align-items: center; justify-content: center; padding: 1.5rem; text-align: center; }
+        .book-asset-fallback.is-visible { display: flex; }
+        .book-cover-frame { aspect-ratio: 4 / 5; border-radius: 2.5rem; image-rendering: auto; backface-visibility: hidden; will-change: transform; -webkit-backface-visibility: hidden; }
+
+        .book-3d-wrap {
+            perspective: 800px;
+            width: min-content;
+        }
+        .book-3d {
+            position: relative;
+            transform-style: preserve-3d;
+            width: 260px;
+            aspect-ratio: 3 / 4;
+            animation: book-rotate 3.4s ease-in-out infinite;
+        }
+        @keyframes book-rotate {
+            0%, 100% { transform: rotateY(-30deg); }
+            50% { transform: rotateY(0deg); }
+        }
+
+        .book-3d-front {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 3px 8px 8px 3px;
+            transform: translateZ(25px);
+            box-shadow:
+                5px 5px 20px rgba(0,0,0,0.5),
+                1px 1px 3px rgba(0,0,0,0.3);
+            background: #ffffff;
+        }
+        .book-3d-front::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2;
+            background:
+                linear-gradient(90deg,
+                    rgba(255,255,255,0.15) 0%,
+                    rgba(255,255,255,0) 3%,
+                    rgba(0,0,0,0) 10%,
+                    rgba(0,0,0,0.02) 50%,
+                    rgba(0,0,0,0) 100%
+                );
+            pointer-events: none;
+        }
+
+        .book-3d-spine {
+            position: absolute;
+            left: 0;
+            top: 4px;
+            bottom: 4px;
+            width: 50px;
+            transform: translateX(234px) rotateY(90deg);
+            background:
+                repeating-linear-gradient(
+                    0deg,
+                    #f5f3ed 0px,
+                    #ece9e0 1px,
+                    #f5f3ed 2px
+                );
+            box-shadow: inset 2px 0 4px rgba(0,0,0,0.08), inset -2px 0 4px rgba(0,0,0,0.05);
+        }
+
+        .book-3d-back {
+            position: absolute;
+            inset: 0;
+            overflow: hidden;
+            border-radius: 3px 8px 8px 3px;
+            transform: translateZ(-25px);
+            box-shadow: -10px 5px 40px rgba(0,0,0,0.4);
+            background: #d4d0c8;
+        }
+
+        .book-3d-front img {
+            position: absolute;
+            inset: 10px;
+            width: calc(100% - 20px);
+            height: calc(100% - 20px);
+            object-fit: cover;
+            border-radius: 2px 4px 4px 2px;
+        }
+
+        .book-3d-content {
+            position: relative;
+            z-index: 1;
+            padding: 1.5rem;
+            color: white;
+        }
+        .book-3d-sm .book-3d {
+            width: 120px;
+        }
+        .book-3d-sm .book-3d-spine {
+            width: 24px;
+            transform: translateX(108px) rotateY(90deg);
+        }
+        .book-3d-sm .book-3d-front img {
+            inset: 5px;
+            width: calc(100% - 10px);
+            height: calc(100% - 10px);
+        }
+
+        .book-spread-frame { aspect-ratio: 4 / 3; border-radius: 1.5rem; }
+        .book-offer-frame { width: min(11rem, 32%); min-width: 7rem; aspect-ratio: 4 / 5; border-radius: 1.25rem; flex: none; transform: rotate(-4deg); image-rendering: auto; }
+
+
+        .social-marquee { overflow: hidden; mask-image: linear-gradient(to right, transparent, black 6%, black 94%, transparent); }
+        .social-track { display: flex; width: max-content; gap: 1rem; animation: social-scroll 90s linear infinite; }
+        .social-marquee:hover .social-track { animation-play-state: paused; }
+        .social-proof-card { width: clamp(13rem, 18vw, 18rem); aspect-ratio: 4 / 5; flex: none; overflow: hidden; background: #151515; }
+        .social-proof-card img { width: 100%; height: 100%; object-fit: cover; }
+        @keyframes social-scroll { to { transform: translateX(-50%); } }
+
+        .incident-ticker-card { background: linear-gradient(145deg, rgba(255,255,255,.08), rgba(255,255,255,.02)); border: 1px solid rgba(255,255,255,.14); box-shadow: inset 3px 0 0 var(--lime); }
+
+        @media (max-width: 640px) {
+            body { overflow-x: hidden; }
+            #site-shell { margin: 0; border-radius: 0; }
+            #site-shell .px-12 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+            #site-shell section.py-24 { padding-top: 4.5rem; padding-bottom: 4.5rem; }
+            #site-shell section.pt-48 { padding-top: 7rem; }
+            .hero-title { font-size: clamp(2.8rem, 13vw, 3.5rem); letter-spacing: -.055em; }
+            h1, h2, h3, p, li, span, a, button { overflow-wrap: anywhere; }
+            .tracking-tech { letter-spacing: .12em; }
+            summary > div { min-width: 0; }
+            summary h3 { font-size: 1rem !important; }
+            .book-cover-frame { transform: none; box-shadow: 0 16px 60px rgba(0,0,0,.5); border-radius: 1.5rem; max-width: 16rem; margin: 0 auto; }
+            .book-3d { width: 220px; }
+            .book-3d-spine { width: 44px; transform: translateX(196px) rotateY(90deg); }
+            .book-3d-wrap { margin: 0 auto; }
+            .glass.p-12 { padding: 1.5rem !important; }
+            .glass.p-8 { padding: 1.25rem !important; }
+            footer .text-\[9rem\] { font-size: 3rem !important; }
+            #sticky-cta { bottom: 1rem; right: 1rem; left: 1rem; }
+            #sticky-cta a { width: 100%; justify-content: center; padding: 1rem; font-size: 1rem; }
+            dialog.hack-modal { border-radius: 1.25rem; }
+            dialog.hack-modal article { padding: 1.25rem !important; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .float-anim, .pulse-lime, .social-track, .book-3d {
+                animation: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="noise-overlay" data-sd-id="1"></div>
+    
+    <div id="site-shell" class="max-w-[1600px] mx-auto min-h-screen bg-[#0c0c0c] my-8 rounded-[2.5rem] ring-1 ring-white/10 shadow-2xl overflow-hidden relative grid-pattern" data-sd-id="2">
+        
+        <!-- 1. Navegação -->
+        <header class="fixed top-12 left-1/2 -translate-x-1/2 z-50 w-full max-w-[1500px] px-8" data-sd-id="3">
+            <nav class="flex items-center justify-between" data-sd-id="4">
+                <div class="glass px-8 py-3 rounded-full hidden md:flex items-center gap-8" data-sd-id="6">
+                    <a href="#livro" id="nav-link-mockups" class="text-white/70 hover:text-[#ccff00] transition-colors font-medium" data-sd-id="7">Livro</a>
+                    <a href="#problema" id="nav-link-problema" class="text-white/70 hover:text-[#ccff00] transition-colors font-medium" data-sd-id="8">Por que ler?</a>
+                    <a href="#metodo" id="nav-link-metodo" class="text-white/70 hover:text-[#ccff00] transition-colors font-medium" data-sd-id="9">O Método</a>
+                    <a href="#conteudo" id="nav-link-conteudo" class="text-white/70 hover:text-[#ccff00] transition-colors font-medium" data-sd-id="10">Capítulos</a>
+                </div>
+
+                <div class="flex items-center gap-6" data-sd-id="11">
+                    <div class="hidden lg:flex items-center gap-2 font-mono text-[10px] uppercase tracking-tech" data-sd-id="12">
+                        <span class="w-2 h-2 rounded-full bg-[#ccff00] pulse-lime" data-sd-id="13"></span>
+                        <span class="text-white/60" data-sd-id="14">Network: Mainnet Ready</span>
+                    </div>
+                </div>
+            </nav>
+        </header>
+
+        <!-- 2. Hero Section -->
+        <section id="livro" class="pt-28 sm:pt-48 pb-24 px-12 lg:px-24" data-sd-id="16">
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center" data-sd-id="17">
+                <div class="lg:col-span-7" data-sd-id="18">
+                    <span class="font-mono text-[#ccff00] text-xs uppercase tracking-tech mb-6 block" data-sd-id="19">[ Engine: Secure Solidity 0.8.20 ]</span>
+                    <h1 class="hero-title font-bold italic mb-10" data-sd-id="20">
+                        Aprenda <span class="text-transparent bg-clip-text bg-gradient-to-b from-[#ccff00] to-white" data-sd-id="21">Solidity</span> do jeito certo e não seja <span class="text-red-500">hackeado</span>.
+                    </h1>
+                    <p class="text-xl text-white/60 max-w-xl mb-12 leading-relaxed" data-sd-id="22">
+                        Crie projetos de portfólio seguros, aprenda a se proteger de casos reais de hacking da indústria e seja protagonista.
+                    </p>
+                    <div class="flex flex-wrap gap-4" data-sd-id="23">
+                        <a href="#oferta" id="hero-primary-cta" class="bg-[#ccff00] text-black font-bold py-4 px-10 rounded-full text-lg hover:scale-105 transition-all lime-shadow" data-sd-id="24">
+                            Começar Jornada Segura
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:col-span-5 relative flex justify-center lg:justify-end" data-sd-id="26">
+                    <div class="book-3d-wrap float-anim" aria-label="Mockup 3D da capa do livro Smartcontract Engineer - Solidity">
+                        <div class="book-3d">
+                            <div class="book-3d-front">
+                                <img src="./assets/social-proofs/book-cover.png" alt="Capa do livro Smartcontract Engineer - Solidity">
+                            </div>
+                            <div class="book-3d-spine"></div>
+                            <div class="book-3d-back"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. VSL -->
+        <section id="vsl" class="py-24 px-12 lg:px-24 bg-black/25">
+            <div class="grid grid-cols-1 lg:grid-cols-[1.25fr_.75fr] gap-10 lg:gap-16 items-center max-w-6xl mx-auto">
+                <div id="vsl-player" class="glass aspect-[4/5] sm:aspect-[9/14] md:aspect-video rounded-[2.5rem] relative overflow-hidden group">
+                    <div class="absolute inset-0 bg-gradient-to-tr from-[#ccff00]/10 to-transparent"></div>
+                    <div class="absolute inset-0 p-3">
+                        <video class="w-full h-full rounded-[2rem] object-cover bg-black" muted playsinline controls preload="metadata" aria-label="VSL Smartcontract Engineer - Solidity">
+                            <!-- source será adicionado quando o .mp4 estiver pronto -->
+                        </video>
+                    </div>
+                    <div class="vsl-label absolute bottom-8 right-8 bg-[#ccff00] text-black font-mono text-[10px] font-bold px-3 py-1 rounded-full flex items-center gap-2 shadow-xl">
+                        <iconify-icon icon="lucide:play"></iconify-icon>
+                        VSL · REPRODUZINDO
+                    </div>
+                </div>
+                <div class="order-first lg:order-none">
+                    <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-5">Assista antes de decidir</p>
+                    <h2 class="text-4xl md:text-5xl font-bold leading-tight mb-6">Entenda por que este livro começa pela <span class="text-[#ccff00]">segurança.</span></h2>
+                    <p class="text-white/60 text-lg leading-relaxed">Em poucos minutos, veja a proposta da formação, a profundidade do material e para quem esta edição foi construída.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Problema (Carousel) -->
+        <section id="problema" class="py-24" data-sd-id="59">
+            <div class="px-12 lg:px-24 max-w-4xl" data-sd-id="60">
+                <span class="font-mono text-xs uppercase tracking-tech text-[#ccff00]">Histórias que moldaram a indústria</span>
+                <h2 class="text-3xl sm:text-5xl font-bold leading-tight mt-6 mb-5" data-sd-id="62">O material hoje não ensina a <span class="text-[#ccff00]" data-sd-id="63">realidade.</span></h2>
+                <p class="text-white/60">Tutoriais rasos não te preparam para os milhões em jogo. A história mostra o preço de ignorar segurança.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10 px-12 lg:px-24">
+                <article class="incident-ticker-card p-7 rounded-2xl flex flex-col">
+                    <div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 02</span><span>17 JUN 2016</span></div>
+                    <p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 210 milhões</p>
+                    <p class="text-xs text-red-300/70 mb-5">US$ 60M · 3,6M ETH drenados</p>
+                    <h3 class="text-2xl font-bold leading-tight mb-4">The DAO: a reentrância que dividiu o Ethereum</h3>
+                    <button type="button" data-hack-modal="hack-modal-dao" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white mt-auto text-left">Saiba mais →</button>
+                </article>
+                <article class="incident-ticker-card p-7 rounded-2xl flex flex-col">
+                    <div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 17</span><span>13 MAR 2023</span></div>
+                    <p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 1,03 bilhão</p>
+                    <p class="text-xs text-red-300/70 mb-5">US$ 197M · 100% devolvidos</p>
+                    <h3 class="text-2xl font-bold leading-tight mb-4">Euler: dez auditorias não bastaram</h3>
+                    <button type="button" data-hack-modal="hack-modal-euler" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white mt-auto text-left">Saiba mais →</button>
+                </article>
+                <article class="incident-ticker-card p-7 rounded-2xl flex flex-col">
+                    <div class="flex justify-between font-mono text-[10px] tracking-tech text-white/40"><span>REPORT 15</span><span>30 JUL 2023</span></div>
+                    <p class="text-red-400 font-mono text-3xl font-bold mt-6">~R$ 345 milhões</p>
+                    <p class="text-xs text-red-300/70 mb-5">US$ 70M · bug no compilador</p>
+                    <h3 class="text-2xl font-bold leading-tight mb-4">Curve: o lock que nunca chegou ao bytecode</h3>
+                    <button type="button" data-hack-modal="hack-modal-curve" class="font-mono text-xs uppercase tracking-tech text-[#ccff00] hover:text-white mt-auto text-left">Saiba mais →</button>
+                </article>
+            </div>
+        </section>
+
+        <dialog id="hack-modal-dao" class="hack-modal"><article class="p-8 md:p-10"><button type="button" data-hack-close class="float-right text-white/50 hover:text-white" aria-label="Fechar">✕</button><p class="font-mono text-xs text-[#ccff00] tracking-tech">CASO #02 · 17 JUN 2016</p><h2 class="text-3xl font-bold mt-3 mb-2">The DAO</h2><p class="text-red-400 text-2xl font-bold mb-6">~R$ 210 milhões perdidos · 3,6M ETH</p><blockquote class="border-l-2 border-[#ccff00] pl-4 text-white/70 italic mb-6">“Roubo de US$ 50 milhões mostra que o DAO era humano demais.”</blockquote><p class="text-white/70 mb-5">A função <code>splitDAO</code> fazia uma chamada externa antes de zerar o saldo. Um contrato atacante reentrava pelo fallback e repetia o saque.</p><pre class="p-4 rounded-xl text-xs text-[#ccff00] mb-5"><code>call.value(balance)(); → balances = 0; // tarde demais</code></pre><p class="text-sm text-white/50"><b class="text-white">Lição:</b> atualize o estado antes de qualquer chamada externa: Checks, Effects, Interactions.</p></article></dialog>
+        <dialog id="hack-modal-euler" class="hack-modal"><article class="p-8 md:p-10"><button type="button" data-hack-close class="float-right text-white/50 hover:text-white" aria-label="Fechar">✕</button><p class="font-mono text-xs text-[#ccff00] tracking-tech">CASO #17 · 13 MAR 2023</p><h2 class="text-3xl font-bold mt-3 mb-2">Euler Finance</h2><p class="text-red-400 text-2xl font-bold mb-6">~R$ 1,03 bilhão perdido · US$ 197M</p><blockquote class="border-l-2 border-[#ccff00] pl-4 text-white/70 italic mb-6">O maior precedente de negociação pós-incidente em DeFi.</blockquote><p class="text-white/70 mb-5">Após flash loans, o atacante usou <code>donateToReserves</code> para ficar artificialmente insolvente e se auto-liquidar com desconto.</p><pre class="p-4 rounded-xl text-xs text-[#ccff00] mb-5"><code>donateToReserves() → faltava checkLiquidity(msg.sender)</code></pre><p class="text-sm text-white/50"><b class="text-white">Lição:</b> toda função que altera colateral ou dívida precisa terminar verificando a solvência.</p></article></dialog>
+        <dialog id="hack-modal-curve" class="hack-modal"><article class="p-8 md:p-10"><button type="button" data-hack-close class="float-right text-white/50 hover:text-white" aria-label="Fechar">✕</button><p class="font-mono text-xs text-[#ccff00] tracking-tech">CASO #15 · 30 JUL 2023</p><h2 class="text-3xl font-bold mt-3 mb-2">Curve Finance</h2><p class="text-red-400 text-2xl font-bold mb-6">~R$ 345 milhões perdidos · US$ 70M</p><blockquote class="border-l-2 border-[#ccff00] pl-4 text-white/70 italic mb-6">O código estava correto. O bytecode não.</blockquote><p class="text-white/70 mb-5">Versões do compilador Vyper não geravam corretamente o reentrancy lock, mesmo com o decorator aplicado no código-fonte.</p><pre class="p-4 rounded-xl text-xs text-[#ccff00] mb-5"><code>@nonreentrant('lock') → lock ausente no bytecode</code></pre><p class="text-sm text-white/50"><b class="text-white">Lição:</b> congele a versão do compilador e teste o bytecode gerado.</p></article></dialog>
+        <dialog id="hack-modal-akutars" class="hack-modal"><article class="p-8 md:p-10"><button type="button" data-hack-close class="float-right text-white/50 hover:text-white" aria-label="Fechar">✕</button><p class="font-mono text-xs text-[#ccff00] tracking-tech">CASO #04 · 22 ABR 2022</p><h2 class="text-3xl font-bold mt-3 mb-2">Akutars NFT</h2><p class="text-red-400 text-2xl font-bold mb-6">~R$ 165 milhões travados para sempre</p><blockquote class="border-l-2 border-[#ccff00] pl-4 text-white/70 italic mb-6">11.539 ETH ficaram inacessíveis após um refund mal-executado.</blockquote><p class="text-white/70 mb-5">Uma variável de estado mudava antes de uma condição que dependia de seu valor anterior. A conta nunca fechava e os fundos ficaram presos.</p><pre class="p-4 rounded-xl text-xs text-[#ccff00] mb-5"><code>refundProgress = i + 1; → require(...)</code></pre><p class="text-sm text-white/50"><b class="text-white">Lição:</b> loops de estado precisam preservar os invariantes dos <code>require</code> seguintes.</p></article></dialog>
+
+        <!-- 5. Autoridade -->
+        <section class="py-24 px-12 lg:px-24 bg-gradient-to-b from-transparent to-black/60" data-sd-id="106">
+            <div class="glass p-12 rounded-[3rem] overflow-hidden relative" data-sd-id="107">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center" data-sd-id="108">
+                    <div class="relative" data-sd-id="109">
+                        <div class="w-full aspect-square bg-[#1a1a1a] rounded-2xl overflow-hidden" data-sd-id="110">
+                            <img src="./assets/lucas.png" alt="Lucas Oliveira" class="w-full h-full object-cover object-center" data-sd-id="111">
+                        </div>
+                        <div class="absolute -bottom-4 -right-4 sm:-bottom-8 sm:-right-8 glass p-4 sm:p-6 rounded-2xl lime-shadow" data-sd-id="112">
+                            <span class="text-4xl font-bold text-[#ccff00]" data-sd-id="113">7x</span>
+                            <p class="text-xs font-mono uppercase tracking-tech text-white/60" data-sd-id="114">Hackathons Vencidos</p>
+                        </div>
+                    </div>
+                    <div data-sd-id="115">
+                        <h2 class="text-4xl font-bold mb-6" data-sd-id="116">Lucas Bispo de Oliveira</h2>
+                        <p class="text-white/60 mb-8 leading-relaxed" data-sd-id="117">
+                            +6 anos como Engenheiro Sênior de Blockchain. Experiência em protocolos blockchains, smartcontracts e bibliotecas de criptografia. Especialista em segurança e vencedor de 7 dos maiores hackathons Nacionais e Globais de Web3. Criou este guia para transformar devs tradicionais em engenheiros de elite.
+                        </p>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-12" data-sd-id="118">
+                            <div class="h-16 rounded-xl bg-white p-3 flex items-center justify-center"><img src="./assets/drex.png" alt="DREX" class="max-h-full max-w-full rounded object-contain"></div>
+                            <div class="h-16 rounded-xl bg-white p-3 flex items-center justify-center"><img src="./assets/visa.png" alt="Visa" class="max-h-full max-w-full object-contain"></div>
+                            <div class="h-16 rounded-xl bg-white p-3 flex items-center justify-center"><img src="./assets/stellar.png" alt="Stellar" class="max-h-full max-w-full object-contain"></div>
+                            <div class="h-16 rounded-xl bg-white p-3 flex items-center justify-center"><img src="./assets/tecban.png" alt="TecBan" class="max-h-full max-w-full object-contain"></div>
+                        </div>
+                        <div data-sd-id="123">
+                            <p class="font-mono text-[10px] uppercase tracking-tech text-[#ccff00] mb-4">Impacto em números</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                <article class="rounded-2xl bg-white/[.04] border border-white/10 p-5"><span class="block text-3xl font-bold text-[#ccff00] mb-2" data-sd-id="125">R$200.000+</span><span class="block text-[10px] font-mono uppercase tracking-tech text-white/50" data-sd-id="126">Distribuídos em programas educacionais</span></article>
+                                <article class="rounded-2xl bg-white/[.04] border border-white/10 p-5"><span class="block text-3xl font-bold text-[#ccff00] mb-2" data-sd-id="128">2.500+</span><span class="block text-[10px] font-mono uppercase tracking-tech text-white/50" data-sd-id="129">Engenheiros formados</span></article>
+                                <article class="rounded-2xl bg-white/[.04] border border-white/10 p-5"><span class="block text-3xl font-bold text-[#ccff00] mb-2">150+</span><span class="block text-[10px] font-mono uppercase tracking-tech text-white/50">Horas ensinando blockchain em português</span></article>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Comparativo -->
+        <section class="py-24 px-12 lg:px-24" data-sd-id="130">
+            <div class="max-w-5xl mx-auto text-center mb-12" data-sd-id="131">
+                <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-4">Decisão de carreira</p>
+                <h2 class="text-4xl md:text-5xl font-bold" data-sd-id="132">O que falta para aprender isso hoje?</h2>
+                <p class="text-white/60 mt-4">A lacuna não é só conteúdo: é contexto, segurança e experiência prática de mercado.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto auto-rows-fr" data-sd-id="133">
+                <article class="comparison-card glass rounded-[2rem] p-8 md:p-10 text-left h-full flex flex-col"><div class="flex items-center justify-between mb-8"><span class="w-11 h-11 rounded-xl bg-white/5 flex items-center justify-center text-white/50"><iconify-icon icon="lucide:layers-2" class="text-xl"></iconify-icon></span><span class="font-mono text-[10px] uppercase tracking-tech text-white/40">O cenário atual</span></div><h3 class="text-3xl font-bold mb-3">Conteúdo fragmentado</h3><p class="text-white/50 mb-8">Muitos pontos de partida. Nenhuma rota completa.</p><ul class="border-t border-white/10 pt-6 space-y-4 text-white/60"><li class="flex gap-3"><span class="text-red-400">—</span><span>Materiais em inglês, nem sempre passo a passo</span></li><li class="flex gap-3"><span class="text-red-400">—</span><span>Pouco contexto para quem vem da Web2</span></li><li class="flex gap-3"><span class="text-red-400">—</span><span>Em português, blockchain raramente inclui segurança</span></li><li class="flex gap-3"><span class="text-red-400">—</span><span>Segurança fora do centro da formação</span></li><li class="flex gap-3"><span class="text-red-400">—</span><span>Pouca experiência de mercado traduzida em método</span></li></ul></article>
+                <article class="comparison-card rounded-[2rem] p-8 md:p-10 text-left bg-[#ccff00] text-black lime-shadow h-full flex flex-col"><div class="flex items-center justify-between mb-8"><span class="w-11 h-11 rounded-xl bg-black/10 flex items-center justify-center"><iconify-icon icon="lucide:route" class="text-xl"></iconify-icon></span><span class="font-mono text-[10px] uppercase tracking-tech opacity-60">Smartcontract Engineer</span></div><h3 class="text-3xl font-bold mb-3">Roadmap claro</h3><p class="opacity-70 mb-8">Da Web2 ao primeiro projeto auditado.</p><ul class="border-t border-black/15 pt-6 space-y-4"><li class="flex gap-3"><span>✓</span><span>25 capítulos no seu próprio ritmo</span></li><li class="flex gap-3"><span>✓</span><span>Segurança desde o capítulo 1</span></li><li class="flex gap-3"><span>✓</span><span>Conteúdo original em português</span></li><li class="flex gap-3"><span>✓</span><span>Projeto auditado de ponta a ponta</span></li><li class="flex gap-3"><span>✓</span><span>Livro físico + lives mensais</span></li></ul></article>
+            </div>
+        </section>
+
+        <!-- 7. Método -->
+        <section id="metodo" class="py-24 px-12 lg:px-24" data-sd-id="157">
+            <div class="text-center mb-20" data-sd-id="158">
+                <h2 class="text-3xl sm:text-5xl font-bold mb-6 italic" data-sd-id="159">O Método <span class="text-[#ccff00]" data-sd-id="160">Solidity-Safe Approach</span></h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8" data-sd-id="161">
+                <div class="glass p-10 rounded-[2.5rem] relative group hover:border-[#ccff00]/50 transition-all" data-sd-id="162">
+                    <span class="absolute top-10 right-10 font-mono text-4xl text-white/5" data-sd-id="163">01</span>
+                    <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-[#ccff00] mb-8" data-sd-id="164">
+                        <iconify-icon icon="lucide:file-text" class="text-3xl"></iconify-icon>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4" data-sd-id="165">Teoria Pura</h3>
+                    <p class="text-white/60" data-sd-id="166">Entenda os internals da EVM, slots de memória e como o Ether realmente se move.</p>
+                </div>
+                <div class="glass p-10 rounded-[2.5rem] relative group hover:border-[#ccff00]/50 transition-all" data-sd-id="167">
+                    <span class="absolute top-10 right-10 font-mono text-4xl text-white/5" data-sd-id="168">02</span>
+                    <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-[#ccff00] mb-8" data-sd-id="169">
+                        <iconify-icon icon="lucide:code-2" class="text-3xl"></iconify-icon>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4" data-sd-id="170">Prática Intensiva</h3>
+                    <p class="text-white/60" data-sd-id="171">15 contratos reais, do Flipper até Auction Houses complexas, escritos do zero.</p>
+                </div>
+                <div class="glass p-10 rounded-[2.5rem] relative group hover:border-[#ccff00]/50 transition-all" data-sd-id="172">
+                    <span class="absolute top-10 right-10 font-mono text-4xl text-white/5" data-sd-id="173">03</span>
+                    <div class="w-14 h-14 bg-white/5 rounded-2xl flex items-center justify-center text-[#ccff00] mb-8" data-sd-id="174">
+                        <iconify-icon icon="lucide:shield-alert" class="text-3xl"></iconify-icon>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4" data-sd-id="175">Construir, Atacar e Proteger</h3>
+                    <p class="text-white/60" data-sd-id="176">Aprenda a hackear seu próprio código para então construir defesas inexpugnáveis.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 8. Conteúdo (Capítulos Expansíveis) -->
+        <section id="conteudo" class="py-24 px-12 lg:px-24" data-sd-id="177">
+            <div class="max-w-4xl mx-auto" data-sd-id="178">
+                <h2 class="text-4xl font-bold mb-12 text-center" data-sd-id="179">Currículo Técnico</h2>
+                
+                <p class="text-center text-white/60 mb-8">Cada capítulo tem um resumo prático: 25 capítulos, 5 apêndices e um projeto completo, do Genesis Block ao deploy auditado.</p>
+                <div class="space-y-4" data-sd-id="180">
+                    <details class="glass rounded-[2rem] overflow-hidden group">
+                        <summary class="p-8 flex items-center justify-between cursor-pointer list-none"><div class="flex items-center gap-6"><span class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xs font-mono text-white/40">I</span><h3 class="text-xl font-bold">Parte I: Dominando Solidity (Capítulos 0–16)</h3></div><iconify-icon icon="lucide:chevron-down" class="text-2xl text-white/40 transition-transform"></iconify-icon></summary>
+                        <div class="px-8 md:px-12 pb-10 text-white/60"><ol class="grid md:grid-cols-2 gap-4 text-sm"><li><b class="text-[#ccff00] font-mono">00 — Fundamentos de Blockchain</b><p>Confiança sem intermediário, wallets, transações, blocos e consenso.</p></li><li><b class="text-[#ccff00] font-mono">01 — Blockchain vs Sistemas Tradicionais</b><p>As diferenças entre Web2 e Web3, da autenticação ao deploy imutável.</p></li><li><b class="text-[#ccff00] font-mono">02 — Ethereum e Smart Contracts</b><p>Gas, EVM, Layer 2, tokens e o ciclo de desenvolvimento.</p></li><li><b class="text-[#ccff00] font-mono">03 — Introdução ao Solidity</b><p>Seu primeiro contrato, compilação, testes e deploy local com Foundry.</p></li><li><b class="text-[#ccff00] font-mono">04 — Variáveis</b><p>Estado, variáveis locais, visibilidade, constantes e imutáveis.</p></li><li><b class="text-[#ccff00] font-mono">05 — Variáveis Globais</b><p>msg, block, tx.origin e o TimeLock com cheatcodes.</p></li><li><b class="text-[#ccff00] font-mono">06 — Tipos de Dados I</b><p>bool, números, bytes, address e strings com custos de gas.</p></li><li><b class="text-[#ccff00] font-mono">07 — Expressões</b><p>Operadores, precedência, bitmasks e decisões eficientes.</p></li><li><b class="text-[#ccff00] font-mono">08 — Controle de Fluxo</b><p>Condições, loops e o padrão pull over push contra DoS.</p></li><li><b class="text-[#ccff00] font-mono">09 — Funções</b><p>Visibilidade, mutabilidade, retornos, receive e fallback.</p></li><li><b class="text-[#ccff00] font-mono">10 — Tipos de Dados II</b><p>Enums, arrays, structs e mappings aplicados a um leilão.</p></li><li><b class="text-[#ccff00] font-mono">11 — Armazenamento</b><p>Storage, memory, calldata, packing de slots e custo real.</p></li><li><b class="text-[#ccff00] font-mono">12 — Tratamento de Erros</b><p>require, revert, assert, custom errors e try/catch.</p></li><li><b class="text-[#ccff00] font-mono">13 — Modificadores e Eventos</b><p>Regras reutilizáveis, logs indexados e observabilidade.</p></li><li><b class="text-[#ccff00] font-mono">14 — Herança e Polimorfismo</b><p>Interfaces, contratos abstratos e linearização C3.</p></li><li><b class="text-[#ccff00] font-mono">15 — Libraries e Imports</b><p>Solady, remappings e extensões com using...for.</p></li><li><b class="text-[#ccff00] font-mono">16 — Contratos</b><p>ERC20, ABI e como o mundo externo conversa com a EVM.</p></li></ol></div>
+                    </details>
+                    <details class="glass rounded-[2rem] overflow-hidden group">
+                        <summary class="p-8 flex items-center justify-between cursor-pointer list-none"><div class="flex items-center gap-6"><span class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xs font-mono text-white/40">II</span><h3 class="text-xl font-bold">Parte II: Prática e Segurança (Capítulos 17–18)</h3></div><iconify-icon icon="lucide:chevron-down" class="text-2xl text-white/40 transition-transform"></iconify-icon></summary>
+                        <div class="px-8 md:px-12 pb-10 text-white/60"><ol class="space-y-4 text-sm"><li><b class="text-[#ccff00] font-mono">17 — 15 Contratos para Praticar</b><p>Uma trilha BDD, do Flipper ao Auction House, com desafios progressivos.</p></li><li><b class="text-[#ccff00] font-mono">18 — Segurança em Smart Contracts</b><p>Threat modeling, reentrância, acesso, MEV, timestamp e bugs históricos.</p></li></ol></div>
+                    </details>
+                    <details class="glass rounded-[2rem] overflow-hidden group">
+                        <summary class="p-8 flex items-center justify-between cursor-pointer list-none"><div class="flex items-center gap-6"><span class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xs font-mono text-white/40">III</span><h3 class="text-xl font-bold">Parte III: Construa, Hackeie e Proteja (Capítulos 19–24)</h3></div><iconify-icon icon="lucide:chevron-down" class="text-2xl text-white/40 transition-transform"></iconify-icon></summary>
+                        <div class="px-8 md:px-12 pb-10 text-white/60"><ol class="grid md:grid-cols-2 gap-4 text-sm"><li><b class="text-[#ccff00] font-mono">19 — Especifique</b><p>Regras de negócio, tokenomics, bonding curve e threat model.</p></li><li><b class="text-[#ccff00] font-mono">20 — Construa</b><p>ERC20 com Solady e VendorMachine com PRB Math.</p></li><li><b class="text-[#ccff00] font-mono">21 — Teste</b><p>Testes unitários, fuzz, invariantes e fork com Foundry.</p></li><li><b class="text-[#ccff00] font-mono">22 — Hackeie</b><p>Slither, revisão manual e exploração de bugs plantados.</p></li><li><b class="text-[#ccff00] font-mono">23 — Proteja e Publique</b><p>Correções, deploy em Sepolia/Base Sepolia e verificação.</p></li><li><b class="text-[#ccff00] font-mono">24 — Evolua</b><p>EVM internals, proxies, ZK, account abstraction e DeFi.</p></li></ol></div>
+                    </details>
+                    <details class="glass rounded-[2rem] overflow-hidden group">
+                        <summary class="p-8 flex items-center justify-between cursor-pointer list-none"><div class="flex items-center gap-6"><span class="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-xs font-mono text-white/40">A–E</span><h3 class="text-xl font-bold">5 Apêndices de referência</h3></div><iconify-icon icon="lucide:chevron-down" class="text-2xl text-white/40 transition-transform"></iconify-icon></summary>
+                        <div class="px-8 md:px-12 pb-10 text-white/60"><ol class="space-y-3 text-sm"><li><b class="text-[#ccff00] font-mono">A — Funções Built-in</b> — referência de address, criptografia e ABI.</li><li><b class="text-[#ccff00] font-mono">B — Unidades e Literais</b> — Ether, tempo e conversões práticas.</li><li><b class="text-[#ccff00] font-mono">C — Checklist do Auditor</b> — 15 perguntas para revisar contratos.</li><li><b class="text-[#ccff00] font-mono">D — Checklist Pré-Mainnet</b> — 7 verificações antes do deploy.</li><li><b class="text-[#ccff00] font-mono">E — Requisitos BDD</b> — cenários completos da VendorMachine.</li></ol></div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. Oferta -->
+        <section id="oferta" class="py-24 px-12 lg:px-24" data-sd-id="228">
+            <div class="glass p-8 md:p-12 lg:p-16 rounded-[3rem] relative overflow-hidden" data-sd-id="229">
+                <!-- Header com badges e título -->
+                <div class="mb-10">
+                    <div class="flex flex-wrap items-center gap-3 mb-6">
+                        <span class="bg-[#ccff00] text-black px-4 py-1.5 rounded-full font-mono text-[10px] font-bold tracking-tech">EDIÇÃO LIMITADA</span>
+                        <span class="font-mono text-[10px] uppercase tracking-tech text-white/40">Pré-venda 2026</span>
+                    </div>
+                    <h2 class="text-4xl md:text-5xl lg:text-6xl font-bold italic leading-[.95]">Segurança não é um capítulo. <span class="text-[#ccff00]">É o livro inteiro.</span></h2>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-10 lg:gap-16 items-stretch">
+                    <!-- Esquerda: capa + features -->
+                    <div class="flex flex-col gap-8">
+                        <div class="flex flex-col sm:flex-row items-center gap-6">
+                            <div class="book-3d-wrap book-3d-sm flex-none" aria-label="Mockup compacto da capa do livro">
+                                <div class="book-3d">
+                                    <div class="book-3d-front">
+                                        <img src="./assets/social-proofs/book-cover.png" alt="Capa do livro Smartcontract Engineer - Solidity" loading="lazy">
+                                    </div>
+                                    <div class="book-3d-spine"></div>
+                                    <div class="book-3d-back"></div>
+                                </div>
+                            </div>
+                            <div class="text-center sm:text-left">
+                                <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-2">Smartcontract Engineer - Solidity</p>
+                                <p class="text-white/50 text-sm">Livro físico · Capa dura premium · Edição numerada</p>
+                            </div>
+                        </div>
+                        <ul class="grid grid-cols-3 gap-2 sm:gap-3">
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-3 sm:p-5 text-center">
+                                <iconify-icon icon="lucide:book-open" class="block text-xl sm:text-2xl text-[#ccff00] mb-2 sm:mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-xl sm:text-2xl font-bold mb-1">25</strong>
+                                <span class="text-[10px] sm:text-xs text-white/50">Capítulos</span>
+                            </li>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-3 sm:p-5 text-center">
+                                <iconify-icon icon="lucide:shield-check" class="block text-xl sm:text-2xl text-[#ccff00] mb-2 sm:mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-xl sm:text-2xl font-bold mb-1">24</strong>
+                                <span class="text-[10px] sm:text-xs text-white/50">Casos de hacking</span>
+                            </li>
+                            <li class="bg-white/[.04] border border-white/10 rounded-2xl p-3 sm:p-5 text-center">
+                                <iconify-icon icon="lucide:layers-3" class="block text-xl sm:text-2xl text-[#ccff00] mb-2 sm:mb-3 mx-auto"></iconify-icon>
+                                <strong class="block text-xl sm:text-2xl font-bold mb-1">15</strong>
+                                <span class="text-[10px] sm:text-xs text-white/50">Contratos práticos</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Direita: CTA WhatsApp -->
+                    <div id="form-container" class="bg-[#111] p-8 lg:p-10 rounded-[2.5rem] border border-[#25D366]/30 flex flex-col justify-between">
+                        <div>
+                            <p class="font-mono text-[10px] uppercase tracking-tech text-[#25D366] mb-3">Canal oficial</p>
+                            <h3 class="text-3xl font-bold mb-4">Entre na pré-venda</h3>
+                            <p class="text-white/60 mb-6">Receba condições, avisos e os próximos passos no grupo oficial do WhatsApp.</p>
+                            <ul class="space-y-3 text-sm text-white/50 mb-8">
+                                <li class="flex items-center gap-3"><iconify-icon icon="lucide:check-circle" class="text-[#25D366]"></iconify-icon> Preço exclusivo de pré-venda</li>
+                                <li class="flex items-center gap-3"><iconify-icon icon="lucide:check-circle" class="text-[#25D366]"></iconify-icon> Acesso antecipado a conteúdo</li>
+                                <li class="flex items-center gap-3"><iconify-icon icon="lucide:check-circle" class="text-[#25D366]"></iconify-icon> Comunidade de engenheiros</li>
+                            </ul>
+                        </div>
+                        <a href="https://chat.whatsapp.com/CRsAIJprw7IAVCdn8YJ2dh" target="_blank" rel="noopener noreferrer" class="w-full bg-[#25D366] text-black font-bold py-5 px-6 rounded-2xl text-lg hover:scale-[1.02] transition-all flex items-center justify-center gap-3">
+                            <iconify-icon icon="fa6-brands:whatsapp" class="text-2xl"></iconify-icon>
+                            Entrar no grupo de pré-venda <iconify-icon icon="lucide:arrow-up-right"></iconify-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 10. Prova Social -->
+        <section class="py-24" data-sd-id="256">
+            <div class="px-12 lg:px-24 text-center mb-12" data-sd-id="257">
+                <p class="font-mono text-xs uppercase tracking-tech text-[#ccff00] mb-4">Conexões Geradas</p>
+                <h2 class="text-4xl font-bold" data-sd-id="258">Quem já conhece o método</h2>
+                <p class="text-white/60 mt-4">Registros de aulas, hackathons, comunidades e experiências construídas ao longo do caminho.</p>
+            </div>
+            <div class="social-marquee" aria-label="Carrossel de provas sociais">
+                <div id="social-proof-track" class="social-track"></div>
+            </div>
+        </section>
+
+        <!-- 11. FAQ -->
+        <section class="py-24 px-12 lg:px-24 bg-black/40" data-sd-id="281">
+            <div class="max-w-3xl mx-auto" data-sd-id="282">
+                <h2 class="text-4xl font-bold mb-12 text-center" data-sd-id="283">Perguntas Frequentes</h2>
+                <div class="space-y-4" data-sd-id="284">
+                    <details class="glass rounded-2xl overflow-hidden group" data-sd-id="285">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none" data-sd-id="286">
+                            <h4 class="font-bold" data-sd-id="287">Preciso saber programar para ler o livro?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60" data-sd-id="288">
+                            Recomendamos conhecimento básico em lógica de programação. O livro cobre Solidity do zero, mas assume que você já entende o que é uma variável ou um loop.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group" data-sd-id="289">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none" data-sd-id="290">
+                            <h4 class="font-bold" data-sd-id="291">O livro é focado apenas em Ethereum?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60" data-sd-id="292">
+                            O foco principal é Solidity e a EVM. Isso significa que o conhecimento se aplica a Polygon, Base, Arbitrum, Optimism e qualquer outra rede compatível.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group" data-sd-id="293">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none" data-sd-id="294">
+                            <h4 class="font-bold" data-sd-id="295">Como recebo os arquivos do projeto prático?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60" data-sd-id="296">
+                            O livro contém QR codes que levam a repositórios exclusivos com todo o código fonte, testes e scripts de deploy.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">O livro tem versão digital (e-book)?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            A primeira edição é exclusivamente física, em capa dura. Uma versão digital pode ser considerada no futuro, mas o foco agora é a experiência premium do livro impresso.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">Qual a diferença deste livro para cursos online de Solidity?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            A segurança é o eixo central desde o primeiro capítulo, não um módulo isolado. Cada conceito é apresentado junto com os vetores de ataque reais e as defesas correspondentes, algo que cursos online raramente cobrem com essa profundidade.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">Preciso ter experiência com blockchain para começar?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            Não. Os primeiros capítulos cobrem fundamentos de blockchain, Ethereum e a EVM do zero. O livro foi feito para desenvolvedores Web2 que querem fazer a transição para Web3.
+                        </div>
+                    </details>
+                    <details class="glass rounded-2xl overflow-hidden group">
+                        <summary class="p-6 flex justify-between items-center cursor-pointer list-none">
+                            <h4 class="font-bold">O livro é entregue para todo o Brasil?</h4>
+                            <iconify-icon icon="lucide:plus" class="text-white/40 group-open:rotate-45 transition-transform"></iconify-icon>
+                        </summary>
+                        <div class="px-6 pb-6 text-white/60">
+                            Sim. A logística cobre todo o território nacional. Detalhes sobre prazos e frete serão compartilhados no grupo de pré-venda do WhatsApp.
+                        </div>
+                    </details>
+                </div>
+            </div>
+        </section>
+
+        <!-- 12. Footer / Fechamento -->
+        <footer class="py-12 px-12 lg:px-24 bg-black relative" data-sd-id="297">
+            <div class="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none select-none" data-sd-id="298">
+                <span class="text-[9rem] font-bold tracking-tighter" data-sd-id="299">SOLIDITY ENGINEER</span>
+            </div>
+            
+            <div class="relative z-10 flex flex-col md:flex-row justify-between items-center gap-12" data-sd-id="300">
+                <div data-sd-id="301">
+                    <span class="block text-2xl font-bold mb-2" data-sd-id="302">Smartcontract Engineer - Solidity</span>
+                    <span class="text-white/40" data-sd-id="303">A solidity-safe approach para engenheiros que levam segurança a sério.</span>
+                </div>
+                
+                <div class="flex gap-8" data-sd-id="304">
+                    <a href="#" id="footer-linkedin" class="w-12 h-12 glass rounded-full flex items-center justify-center text-white/60 hover:text-[#ccff00] hover:border-[#ccff00]/50 transition-all" data-sd-id="305">
+                        <iconify-icon icon="lucide:linkedin" class="text-2xl"></iconify-icon>
+                    </a>
+                    <a href="#" id="footer-github" class="w-12 h-12 glass rounded-full flex items-center justify-center text-white/60 hover:text-[#ccff00] hover:border-[#ccff00]/50 transition-all" data-sd-id="306">
+                        <iconify-icon icon="lucide:github" class="text-2xl"></iconify-icon>
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Sticky CTA -->
+        <div id="sticky-cta" class="fixed bottom-8 right-8 z-50 transition-all duration-500 translate-y-24 opacity-0" data-sd-id="307">
+            <a href="https://chat.whatsapp.com/CRsAIJprw7IAVCdn8YJ2dh" target="_blank" rel="noopener noreferrer" id="sticky-cta-btn" class="bg-[#ccff00] text-black font-bold py-4 px-8 rounded-full flex items-center gap-3 lime-shadow hover:scale-105 transition-all" data-sd-id="308">
+                Entrar na pré-venda
+                <iconify-icon icon="lucide:chevron-right"></iconify-icon>
+            </a>
+        </div>
+
+    </div>
+
+    <script>
+        const stickyCTA = document.getElementById('sticky-cta');
+        window.addEventListener('scroll', () => {
+            stickyCTA.classList.toggle('translate-y-24', window.scrollY <= 800);
+            stickyCTA.classList.toggle('opacity-0', window.scrollY <= 800);
+        });
+
+
+        const socialProofTrack = document.getElementById('social-proof-track');
+        const socialProofs = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 17, 18, 19, 20, 21, 23].map((number) => {
+            const extension = [18, 21, 23].includes(number) ? 'jpg' : 'jpeg';
+            return { number, src: `./assets/social-proofs/social-proof-${String(number).padStart(2, '0')}.${extension}` };
+        });
+        const socialProofPositions = { 4: '75% center', 10: '75% center', 11: '25% center', 12: '75% center', 18: '25% center' };
+        socialProofTrack.innerHTML = [...socialProofs, ...socialProofs].map(({ number, src }) => {
+            const position = socialProofPositions[number] || 'center';
+            return `<figure class="social-proof-card glass rounded-2xl"><img src="${src}" alt="Prova social ${String(number).padStart(2, '0')}" style="object-position: ${position}" loading="lazy"></figure>`;
+        }).join('');
+
+
+        document.querySelectorAll('[data-hack-modal]').forEach((button) => {
+            button.addEventListener('click', () => document.getElementById(button.dataset.hackModal).showModal());
+        });
+        document.querySelectorAll('[data-hack-close]').forEach((button) => {
+            button.addEventListener('click', () => button.closest('dialog').close());
+        });
+        document.querySelectorAll('.hack-modal').forEach((modal) => {
+            modal.addEventListener('click', (event) => { if (event.target === modal) modal.close(); });
+        });
+
+        document.querySelectorAll('details').forEach((detail) => {
+            detail.addEventListener('toggle', () => {
+                detail.querySelector('summary').setAttribute('aria-expanded', String(detail.open));
+            });
+        });
+
+        // --- Custom Event Tracking (Vercel Analytics) ---
+        function va(name, data) {
+            if (window.va) window.va('event', { name, data });
+        }
+
+        // 1. Scroll depth — fires once per threshold
+        const scrollFired = {};
+        window.addEventListener('scroll', () => {
+            const pct = Math.round((window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100);
+            [25, 50, 75, 100].forEach((t) => {
+                if (pct >= t && !scrollFired[t]) {
+                    scrollFired[t] = true;
+                    va('scroll_depth', { depth: String(t) });
+                }
+            });
+        }, { passive: true });
+
+        // 2. Chapter details opened
+        document.querySelectorAll('#conteudo details').forEach((d) => {
+            d.addEventListener('toggle', () => {
+                if (d.open) {
+                    const title = d.querySelector('h3')?.textContent?.trim() || 'unknown';
+                    va('chapter_opened', { chapter: title });
+                }
+            });
+        });
+
+        // 3. Hack case modals opened
+        document.querySelectorAll('[data-hack-modal]').forEach((btn) => {
+            btn.addEventListener('click', () => {
+                const label = btn.closest('article')?.querySelector('h3')?.textContent?.trim() || btn.dataset.hackModal;
+                va('hack_case_opened', { case: label });
+            });
+        });
+
+        // 4. CTA clicks
+        document.getElementById('hero-primary-cta')?.addEventListener('click', () => va('cta_click', { location: 'hero' }));
+        document.getElementById('sticky-cta-btn')?.addEventListener('click', () => va('cta_click', { location: 'sticky' }));
+        document.querySelector('#form-container a[href*="whatsapp"]')?.addEventListener('click', () => va('cta_click', { location: 'offer_whatsapp' }));
+
+        // 5. Time on page — fires at 30s, 60s, 120s, 300s
+        const timeFired = {};
+        [30, 60, 120, 300].forEach((s) => {
+            setTimeout(() => {
+                if (!document.hidden && !timeFired[s]) {
+                    timeFired[s] = true;
+                    va('time_on_page', { seconds: String(s) });
+                }
+            }, s * 1000);
+        });
+
+        // 6. Section visibility — fires once per section entering viewport
+        const sectionSeen = {};
+        const sectionObs = new IntersectionObserver((entries) => {
+            entries.forEach((e) => {
+                if (e.isIntersecting && !sectionSeen[e.target.id]) {
+                    sectionSeen[e.target.id] = true;
+                    va('section_viewed', { section: e.target.id });
+                }
+            });
+        }, { threshold: 0.3 });
+        document.querySelectorAll('section[id]').forEach((s) => sectionObs.observe(s));
+
+        // 7. FAQ opened
+        document.querySelectorAll('section.bg-black\\/40 details').forEach((d) => {
+            d.addEventListener('toggle', () => {
+                if (d.open) {
+                    const q = d.querySelector('h4')?.textContent?.trim() || 'unknown';
+                    va('faq_opened', { question: q });
+                }
+            });
+        });
+
+        // 8. VSL video play
+        const vslVideo = document.querySelector('#vsl-player video');
+        if (vslVideo) {
+            vslVideo.addEventListener('play', () => va('vsl_play', {}), { once: true });
+            vslVideo.addEventListener('ended', () => va('vsl_completed', {}), { once: true });
+        }
+
+        // 9. Nav link clicks
+        document.querySelectorAll('header nav a[href^="#"]').forEach((a) => {
+            a.addEventListener('click', () => va('nav_click', { target: a.getAttribute('href') }));
+        });
+
+        // 10. Footer social clicks
+        document.getElementById('footer-linkedin')?.addEventListener('click', () => va('social_click', { network: 'linkedin' }));
+        document.getElementById('footer-github')?.addEventListener('click', () => va('social_click', { network: 'github' }));
+
+        // 11. Exit intent (mouse leaves viewport top)
+        let exitFired = false;
+        document.addEventListener('mouseout', (e) => {
+            if (!exitFired && e.clientY < 5) {
+                exitFired = true;
+                va('exit_intent', {});
+            }
+        });
+    </script>
+
+    <!-- Vercel Analytics + Speed Insights -->
+    <script defer src="/_vercel/insights/script.js"></script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
+
+</body></html>

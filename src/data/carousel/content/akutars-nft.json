@@ -1,0 +1,49 @@
+{
+  "slide1": {
+    "value": "US$ 34M",
+    "valueToday": "ETH congelado permanentemente",
+    "coin": "ETH",
+    "coinAmount": "11.539 ETH",
+    "attackType": "STATE VARIABLE BUG",
+    "lines": 1,
+    "title": "Como um bug de variável de estado travou US$ 34M em ETH para sempre.",
+    "headline": "Sem hack externo — apenas um bug no contrato inteligente do refund travou 11.539 ETH permanentemente. Ninguém atacou, ninguém roubou."
+  },
+  "slide2": {
+    "contextTitle": "US$ 34M travados para sempre — sem hack, sem atacante.",
+    "contextSub": "Akutars era uma coleção NFT de 15.000 peças. O bug estava na lógica de reembolso do leilão.",
+    "cards": [
+      { "tag": "NFT", "title": "Akutars por Micah Johnson", "body": "Coleção de 15.000 NFTs com leilão holandês que arrecadou 11.539 ETH (~US$34M)." },
+      { "tag": "LEILÃO", "title": "Dutch auction + refund", "body": "Quem pagou acima do preço final teria direito a refund. A lógica usava um loop com variável de estado." },
+      { "tag": "BUG", "title": "Variável nunca zerada", "body": "A variável de controle do refund nunca era resetada corretamente. O loop travava e o ETH ficava preso.", "danger": true },
+      { "tag": "RESULTADO", "title": "Fundos inacessíveis", "body": "11.539 ETH congelados no contrato. Sem função de resgate, sem upgrade path, sem recover.", "danger": true }
+    ]
+  },
+  "slide3": {
+    "attackTitle": "Como um loop de refund travou e congelou todos os fundos.",
+    "attack": [
+      "O leilão holandês arrecada 11.539 ETH de compradores.",
+      "A lógica de refund usa um loop que depende de uma variável de estado.",
+      "A variável nunca é resetada — o loop fica preso em estado inconsistente.",
+      "A função de refund para de funcionar permanentemente.",
+      "Sem função de resgate no contrato — 11.539 ETH ficam congelados para sempre."
+    ]
+  },
+  "slide4": {
+    "diffTitle": "A variável de estado que nunca foi resetada.",
+    "vulnerable": "function refund() external {\n  payable(msg.sender).transfer(refundAmount);\n  refundCount++;\n}",
+    "corrected": "function refund() external nonReentrant {\n  if(refunded[msg.sender]) {\n    revert(\"already claimed\");\n  }\n  refunded[msg.sender] = true;\n  payable(msg.sender).transfer(refundAmount);\n}"
+  },
+  "slide5": {
+    "lessons": [
+      "Teste edge cases de refund",
+      "Loops de reembolso precisam de testes com cenários adversariais.",
+      "Inclua função de resgate",
+      "Todo contrato com fundos precisa de mecanismo de emergência.",
+      "Variáveis de estado em loops",
+      "Garanta que variáveis de controle são resetadas corretamente.",
+      "Auditoria antes do mint",
+      "NFTs com leilão e refund têm complexidade que exige revisão externa."
+    ]
+  }
+}

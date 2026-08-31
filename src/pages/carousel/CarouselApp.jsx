@@ -1,0 +1,74 @@
+import React, { useState } from 'react'
+import { IncidentDeck } from './IncidentDeck'
+import SmartcontractDaoSlides from './SmartcontractDaoSlides'
+
+import theDao from '../../data/carousel/the-dao.json'
+import parityWallet from '../../data/carousel/parity-wallet.json'
+import beautychain from '../../data/carousel/beautychain.json'
+import bzx from '../../data/carousel/bzx.json'
+import polyNetwork from '../../data/carousel/poly-network.json'
+import creamFinance from '../../data/carousel/cream-finance.json'
+import roninBridge from '../../data/carousel/ronin-bridge.json'
+import akutarsNft from '../../data/carousel/akutars-nft.json'
+import nomadBridge from '../../data/carousel/nomad-bridge.json'
+import eulerFinance from '../../data/carousel/euler-finance.json'
+import curveFinance from '../../data/carousel/curve-finance.json'
+
+const carousels = [
+  theDao, parityWallet, beautychain, bzx, polyNetwork,
+  creamFinance, roninBridge, akutarsNft, nomadBridge,
+  eulerFinance, curveFinance,
+]
+
+export function CarouselApp() {
+  const [selected, setSelected] = useState(0)
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  const pick = (i) => {
+    setSelected(i)
+    setMenuOpen(false)
+  }
+
+  return (
+    <div className="app-shell">
+      <button
+        className={`menu-toggle ${menuOpen ? 'open' : ''}`}
+        onClick={() => setMenuOpen(!menuOpen)}
+        aria-label="Toggle menu"
+      >
+        <span /><span /><span />
+      </button>
+
+      <div
+        className={`sidebar-backdrop ${menuOpen ? 'visible' : ''}`}
+        onClick={() => setMenuOpen(false)}
+      />
+
+      <aside className={`sidebar ${menuOpen ? 'open' : ''}`}>
+        <div className="sidebar-header">
+          <h2>SOLBOOK</h2>
+          <p>Security Incident Reports</p>
+        </div>
+        <nav className="sidebar-list">
+          {carousels.map((c, i) => (
+            <button
+              key={c.slug}
+              className={`sidebar-item ${selected === i ? 'active' : ''}`}
+              onClick={() => pick(i)}
+            >
+              <span className="item-number">{String(i + 1).padStart(2, '0')}</span>
+              <span className="item-name">{c.name}</span>
+              <span className="item-report">{c.report}</span>
+            </button>
+          ))}
+        </nav>
+      </aside>
+
+      <main className="dao-showcase">
+        {selected === 0
+          ? <SmartcontractDaoSlides />
+          : <IncidentDeck incident={carousels[selected]} key={carousels[selected].slug} />}
+      </main>
+    </div>
+  )
+}

@@ -1,0 +1,30 @@
+{
+  "name": "scoter",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "build:landing": "cp -r landing-pages/livro dist-landing",
+    "preview": "vite preview",
+    "export:pdf": "node scripts/carousel/generate-pdfs.mjs",
+    "build:carousel": "node scripts/build.mjs"
+  },
+  "dependencies": {
+    "@git-diff-view/file": "^0.1.7",
+    "@git-diff-view/react": "^0.1.7",
+    "@git-diff-view/shiki": "^0.1.7",
+    "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "react-router-dom": "^7.6.0",
+    "shiki": "^4.4.3"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^4.5.2",
+    "esbuild": "^0.28.2",
+    "puppeteer": "^24.43.1",
+    "vite": "^6.3.5"
+  }
+}
