@@ -3,7 +3,7 @@
   "scripts": {
     "dev": "vite",
     "build": "node build.mjs",
-    "export:pdf": "node scripts/generate-pdfs.mjs"
+    "export:pdf": "node scripts/gen-pdf.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.5.2",
