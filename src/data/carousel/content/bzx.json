@@ -23,16 +23,16 @@
     "attackTitle": "Como capital infinito temporário quebrou um oráculo.",
     "attack": [
       "O atacante faz flash loan de 10.000 ETH no dYdX.",
-      "Usa parte do ETH como colateral para abrir posição short no bZx.",
-      "Com o restante, compra ETH massivamente no Uniswap — inflando o preço.",
-      "O oráculo on-chain do bZx lê o preço manipulado e liquida a posição errada.",
-      "O atacante lucra com a diferença e devolve o flash loan na mesma transação."
+      "Com 1.300 ETH, abre uma posição short 5x no bZx.",
+      "O bZx é forçado a despejar 5.637 ETH numa pool rasa para comprar WBTC.",
+      "O preço do WBTC explode quase 3x — e a posição já nasce subcolateralizada.",
+      "O atacante vende 112 WBTC no pico, devolve o flash loan e sai no lucro."
     ]
   },
   "slide4": {
-    "diffTitle": "O oráculo spot que deveria ser um TWAP.",
-    "vulnerable": "function borrow(uint amount) external {\n  uint price = spotOracle.getPrice();\n  _borrow(amount, price);\n}",
-    "corrected": "function borrow(uint amount) external {\n  uint price = twapOracle.getPrice();\n  if(twapOracle.isStale()) {\n    revert(\"stale price\");\n  }\n  _borrow(amount, price);\n}"
+    "diffTitle": "O protocolo aceitou uma posição que já nascia quebrada.",
+    "vulnerable": "function openPosition(uint amount) external {\n  uint rate = kyber.getExpectedRate(src, dest, amount);\n  _executeTrade(amount, rate); // execução a qualquer preço\n  // FALTA: require(_isPositionHealthy(...))\n}",
+    "corrected": "function openPosition(uint amount) external {\n  uint rate = twapOracle.getPrice();\n  if (rate < minRate) revert(\"slippage\");\n  _executeTrade(amount, rate);\n  if (!_isPositionHealthy(...)) revert(\"unsafe margin\");\n}"
   },
   "slide5": {
     "lessons": [
