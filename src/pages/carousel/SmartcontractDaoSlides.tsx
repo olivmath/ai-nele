@@ -61,7 +61,7 @@ function ProfileSignature() {
 
 function SlideShell({ id, index, label, danger, children }: { id: string; index: number; label: string; danger?: boolean; children: React.ReactNode }) {
   return (
-    <section id={id} className="relative mx-auto flex min-h-[630px] w-full max-w-[1120px] snap-center flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0c0c] shadow-2xl shadow-black/60">
+    <section id={id} data-pdf-slide className="relative mx-auto flex min-h-[630px] w-full max-w-[1120px] snap-center flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0c0c] shadow-2xl shadow-black/60">
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(255,255,255,.035)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,.035)_1px,transparent_1px)] bg-[size:60px_60px]" />
       <div className="pointer-events-none absolute -right-40 -top-56 size-[580px] rounded-full bg-[#ccff00]/[0.055] blur-3xl" />
       <CaseBar index={index} label={label} danger={danger} />
@@ -89,7 +89,18 @@ export default function SmartcontractDaoSlides() {
 
   return (
     <main className="min-h-screen bg-black px-4 py-8 font-['Space_Grotesk'] text-[#ebebeb] selection:bg-[#ccff00] selection:text-black md:px-8">
-      <style>{`@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap'); html { scroll-behavior: smooth; }`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap'); html { scroll-behavior: smooth; }
+        @media print {
+          @page { size: 1080px 1350px; margin: 0; }
+          .print-controls, .menu-toggle, .sidebar, .sidebar-backdrop, nav { display: none !important; }
+          .dao-showcase, main { margin: 0 !important; padding: 0 !important; }
+          [data-pdf-slide] { width: 1080px !important; min-width: 1080px !important; height: 1350px !important; min-height: 1350px !important; max-width: none !important; margin: 0 !important; border-radius: 0 !important; break-after: page; page-break-after: always; }
+        }`}</style>
+      <div className="print-controls fixed right-5 top-5 z-50">
+        <button type="button" onClick={() => window.print()} className="rounded-full border border-[#ccff00]/60 bg-black/85 px-4 py-2 font-mono text-[11px] font-bold uppercase tracking-[0.12em] text-[#ccff00] shadow-[0_0_20px_rgba(204,255,0,.16)] transition hover:bg-[#ccff00] hover:text-black">
+          Gerar PDF
+        </button>
+      </div>
       <nav className="fixed right-5 top-1/2 z-50 hidden -translate-y-1/2 flex-col gap-3 lg:flex" aria-label="Navegação dos slides">
         {slides.map((slide, index) => (
           <a key={slide} href={`#slide-${index + 1}`} aria-label={slide} className={`size-2.5 rounded-full border transition-all ${active === index ? "scale-125 border-[#ccff00] bg-[#ccff00] shadow-[0_0_16px_rgba(204,255,0,.7)]" : "border-white/30 bg-black"}`} />
