@@ -45,6 +45,20 @@ function CaseBar({ index, label, danger = false }: { index: number; label: strin
   )
 }
 
+function ProfileSignature() {
+  return (
+    <footer className="relative z-10 mt-6 flex w-full max-w-[360px] items-center gap-4 rounded-2xl border border-[#ccff00]/30 bg-[#12150d]/90 px-4 py-3 shadow-[0_0_28px_rgba(204,255,0,.12)]">
+      <div className="size-20 shrink-0 overflow-hidden rounded-full border-2 border-[#ccff00]/75 bg-[#151515] shadow-[0_0_24px_rgba(204,255,0,.25)]">
+        <img src="/images/lucas-profile.jpeg" alt="Lucas Bispo de Oliveira" className="size-full object-contain" />
+      </div>
+      <div className="min-w-0">
+        <p className="truncate text-lg font-bold tracking-tight text-white">Lucas Bispo de Oliveira</p>
+        <p className="mt-1.5 truncate font-mono text-[11px] uppercase tracking-[0.1em] text-white/60">Senior Blockchain Engineer</p>
+      </div>
+    </footer>
+  )
+}
+
 function SlideShell({ id, index, label, danger, children }: { id: string; index: number; label: string; danger?: boolean; children: React.ReactNode }) {
   return (
     <section id={id} className="relative mx-auto flex min-h-[630px] w-full max-w-[1120px] snap-center flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0c0c0c] shadow-2xl shadow-black/60">
@@ -52,6 +66,7 @@ function SlideShell({ id, index, label, danger, children }: { id: string; index:
       <div className="pointer-events-none absolute -right-40 -top-56 size-[580px] rounded-full bg-[#ccff00]/[0.055] blur-3xl" />
       <CaseBar index={index} label={label} danger={danger} />
       <div className="relative z-10 flex flex-1 flex-col p-7 md:p-14">{children}</div>
+      <div className="px-7 pb-7 md:px-14 md:pb-10"><ProfileSignature /></div>
     </section>
   )
 }
